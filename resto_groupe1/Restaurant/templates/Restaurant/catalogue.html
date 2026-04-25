@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalogue du Restaurant</title>
+</head>
+<body>
+    <h1>Carte du Restaurant</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom du Plat</th>
+                <th>Description</th>
+                <th>Cuisson</th>
+                <th>Personnes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plat in plats %}
+            <tr>
+                <td>{{ plat.Nom }}</td>
+                <td>{{ plat.Description }}</td>
+                <td>{{ plat.Duree_Cuisson }}</td>
+                <td>{{ plat.Nombre_Personnes }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
