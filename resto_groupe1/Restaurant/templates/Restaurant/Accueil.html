@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Les Délices du Groupe 1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, serif;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 60px 40px;
+            background: white;
+            width: 500px;
+            border-top: 6px solid #C9A84C;
+            border-bottom: 6px solid #C9A84C;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .bienvenue {
+            color: #C9A84C;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 30px;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .sous-titre {
+            font-size: 12px;
+            color: #999;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: #C9A84C;
+            margin: 0 auto 40px auto;
+        }
+
+        .question {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+        .choix {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 20px 30px;
+            width: 180px;
+            border: 2px solid #C9A84C;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .btn-client {
+            background: #C9A84C;
+            color: white;
+        }
+
+        .btn-client:hover {
+            background: #b8943d;
+            border-color: #b8943d;
+        }
+
+        .btn-personnel {
+            background: white;
+            color: #C9A84C;
+        }
+
+        .btn-personnel:hover {
+            background: #C9A84C;
+            color: white;
+        }
+
+        .icon { font-size: 30px; display: block; margin-bottom: 10px; }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 11px;
+            color: #bbb;
+            letter-spacing: 1px;
+        }
+
+        .star { color: #C9A84C; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="bienvenue">✦ Bienvenue ✦</p>
+    <h1>Les Délices</h1>
+    <p class="sous-titre">du Groupe 1</p>
+    <div class="divider"></div>
+
+    <p class="question">Qui êtes-vous ?</p>
+
+    <div class="choix">
+        <a href="/restaurant/catalogue/" class="btn btn-client">
+            <span class="icon">🍽️</span>
+            Je suis<br><strong>Client</strong>
+        </a>
+        <a href="/restaurant/login/" class="btn btn-personnel">
+            <span class="icon">👨‍💼</span>
+            Je suis<br><strong>Personnel</strong>
+        </a>
+    </div>
+
+    <p class="footer">
+        <span class="star">✦</span>
+        Les Délices du Groupe 1
+        <span class="star">✦</span>
+    </p>
+</div>
+</body>
+</html>

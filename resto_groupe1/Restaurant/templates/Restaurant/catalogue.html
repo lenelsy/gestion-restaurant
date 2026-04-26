@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Les Délices du Groupe 1</title>
+    <style>
+        body {
+            font-family: Georgia, serif;
+            background: #f9f9f9;
+            padding: 30px;
+        }
+        h1 {
+            color: #C9A84C;
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        .produit-card {
+            border: 1px solid #ddd;
+            margin: 15px auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 350px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h3 { color: #1a1a1a; margin: 0 0 5px 0; }
+        .prix {
+            font-weight: bold;
+            color: #C9A84C;
+            font-size: 1.2em;
+        }
+        .btn {
+            background: #C9A84C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 14px;
+            font-family: Georgia, serif;
+        }
+        .btn:hover { background: #b8943d; }
+    </style>
+</head>
+<body>
+    <h1>✦ Les Délices du Groupe 1 ✦</h1>
+    <div>
+        {% for produit in produits %}
+        <div class="produit-card">
+            <h3>{{ produit.nom }}</h3>
+            <p class="prix">{{ produit.prix }} FCFA</p>
+            <a href="/restaurant/commander/{{ produit.id }}/">
+                <button class="btn">Commander</button>
+            </a>
+        </div>
+        {% empty %}
+        <p style="text-align:center">Aucun plat disponible.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commander — Les Délices du Groupe 1</title>
+    <style>
+        body { font-family: Georgia, serif; background: #f9f9f9; padding: 30px; }
+        h1 { color: #C9A84C; text-align: center; }
+        .form-card {
+            border: 1px solid #ddd; margin: 20px auto;
+            padding: 30px; border-radius: 8px;
+            width: 400px; background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        h2 { color: #1a1a1a; }
+        .prix { color: #C9A84C; font-weight: bold; font-size: 1.3em; }
+        label { display: block; margin-top: 15px; color: #666; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; font-family: Georgia, serif; }
+        .btn { background: #C9A84C; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 20px; font-size: 15px; font-family: Georgia, serif; }
+        .btn:hover { background: #b8943d; }
+        a { color: #C9A84C; }
+    </style>
+</head>
+<body>
+    <h1>✦ Commander ✦</h1>
+    <div class="form-card">
+        <h2>{{ produit.nom }}</h2>
+        <p class="prix">{{ produit.prix }} FCFA</p>
+        <form method="post">
+            {% csrf_token %}
+            <label>Votre nom</label>
+            <input type="text" name="nom_client" placeholder="Ex: Jean Dupont" required>
+            <label>Quantité</label>
+            <input type="number" name="quantite" value="1" min="1" required>
+            <button type="submit" class="btn">Confirmer la commande</button>
+        </form>
+    </div>
+    <p style="text-align:center; margin-top:20px;">
+        <a href="/restaurant/catalogue/">← Retour au catalogue</a>
+    </p>
+</body>
+</html>
