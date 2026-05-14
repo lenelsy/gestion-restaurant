@@ -1,0 +1,14 @@
+# HR Management System (Flask)
+
+Simple HR system to manage employees.
+
+## Features
+- Add employee
+- List employees
+- Delete employee
+
+## Run locally
+
+```bash
+pip install -r requirements.txt
+python app.py
