@@ -110,3 +110,39 @@ class Commande(models.Model):
 
     def __str__(self):
         return f"Commande {self.id} - {self.produit.nom}"
+    
+    # ==========================================
+# MODULE : USER MANAGEMENT
+# ==========================================
+
+# On importe le modèle User intégré de Django
+# Django a déjà une table User avec username, password, email
+from django.contrib.auth.models import User
+
+# UserProfile étend le User Django avec un rôle spécifique
+# Chaque utilisateur du restaurant aura un profil avec son rôle
+class UserProfile(models.Model):
+    
+    # Liste des rôles possibles dans le restaurant
+    # Format : ('valeur_en_base', 'Affichage à l écran')
+    ROLES = [
+        ('admin', 'Administrateur'),          # Gère tout le système
+        ('directeur', 'Directeur'),            # Supervise le restaurant
+        ('chef_cuisinier', 'Chef Cuisinier'),  # Gère la cuisine
+        ('cuisinier', 'Cuisinier'),            # Prépare les plats
+        ('serveur', 'Serveur'),                # Gère les commandes
+        ('gestionnaire_stock', 'Gestionnaire de Stock'), # Gère les stocks
+    ]
+    
+    # Lien vers le User Django — un profil = un seul utilisateur
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    # Le rôle de cet utilisateur dans le restaurant
+    role = models.CharField(max_length=50, choices=ROLES)
+    
+    # Numéro de téléphone (optionnel)
+    telephone = models.CharField(max_length=15, blank=True, null=True)
+    
+    # Affichage lisible dans l'interface admin
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
