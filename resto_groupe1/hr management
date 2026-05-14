@@ -1,0 +1,76 @@
+from flask import Flask, request, redirect
+
+app = Flask(__name__)
+
+# ---------------- DATA EN MÉMOIRE ----------------
+employees = []
+id_counter = 1
+
+
+# ---------------- PAGE PRINCIPALE ----------------
+@app.route("/")
+def home():
+    html = """
+    <h1>HR Management System</h1>
+
+    <h2>Add Employee</h2>
+    <form method="POST" action="/add">
+        <input name="name" placeholder="Name" required>
+        <input name="position" placeholder="Position" required>
+        <input name="salary" type="number" placeholder="Salary" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Employees</h2>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>ID</th><th>Name</th><th>Position</th><th>Salary</th><th>Action</th>
+        </tr>
+    """
+
+    for e in employees:
+        html += f"""
+        <tr>
+            <td>{e['id']}</td>
+            <td>{e['name']}</td>
+            <td>{e['position']}</td>
+            <td>{e['salary']}</td>
+            <td><a href="/delete/{e['id']}">Delete</a></td>
+        </tr>
+        """
+
+    html += "</table>"
+    return html
+
+
+# ---------------- AJOUT ----------------
+@app.route("/add", methods=["POST"])
+def add():
+    global id_counter
+
+    name = request.form["name"]
+    position = request.form["position"]
+    salary = request.form["salary"]
+
+    employees.append({
+        "id": id_counter,
+        "name": name,
+        "position": position,
+        "salary": salary
+    })
+
+    id_counter += 1
+    return redirect("/")
+
+
+# ---------------- SUPPRESSION ----------------
+@app.route("/delete/<int:emp_id>")
+def delete(emp_id):
+    global employees
+    employees = [e for e in employees if e["id"] != emp_id]
+    return redirect("/")
+
+
+# ---------------- LANCEMENT ----------------
+if __name__ == "__main__":
+    app.run(debug=True)
