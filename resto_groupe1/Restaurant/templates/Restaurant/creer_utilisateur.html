@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <!-- Titre de la page -->
+    <title>Créer un Utilisateur</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        /* Conteneur du formulaire centré */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        /* Titre */
+        h1 {
+            color: #B8860B;
+            text-align: center;
+        }
+        /* Style des champs du formulaire */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        /* Style des labels */
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        /* Style des inputs */
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        /* Style du bouton soumettre */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #B8860B;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        /* Lien retour */
+        .retour {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #B8860B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Titre du formulaire -->
+        <h1>★ Créer un Utilisateur ★</h1>
+
+        <!-- Formulaire de création d'utilisateur -->
+        <!-- method POST pour envoyer les données au serveur -->
+        <!-- csrf_token protège contre les attaques -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Champ nom d'utilisateur -->
+            <div class="form-group">
+                <label>Nom d'utilisateur</label>
+                <input type="text" name="username"
+                       placeholder="Ex: serveur01" required>
+            </div>
+
+            <!-- Champ email -->
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email"
+                       placeholder="Ex: serveur@restaurant.com" required>
+            </div>
+
+            <!-- Champ mot de passe -->
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" name="password"
+                       placeholder="Mot de passe" required>
+            </div>
+
+            <!-- Champ rôle — liste déroulante -->
+            <div class="form-group">
+                <label>Rôle</label>
+                <select name="role" required>
+                    <!-- Option par défaut -->
+                    <option value="">-- Choisir un rôle --</option>
+                    <!-- Les 6 rôles du restaurant -->
+                    <option value="admin">Administrateur</option>
+                    <option value="directeur">Directeur</option>
+                    <option value="chef_cuisinier">Chef Cuisinier</option>
+                    <option value="cuisinier">Cuisinier</option>
+                    <option value="serveur">Serveur</option>
+                    <option value="gestionnaire_stock">
+                        Gestionnaire de Stock
+                    </option>
+                </select>
+            </div>
+
+            <!-- Champ téléphone optionnel -->
+            <div class="form-group">
+                <label>Téléphone (optionnel)</label>
+                <input type="text" name="telephone"
+                       placeholder="Ex: 6XXXXXXXX">
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn-submit">
+                Créer l'utilisateur
+            </button>
+        </form>
+
+        <!-- Lien pour retourner à la liste -->
+        <a href="/restaurant/utilisateurs/" class="retour">
+            ← Retour à la liste
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <!-- Titre de la page -->
+    <title>Modifier un Utilisateur</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        /* Conteneur centré */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        /* Titre */
+        h1 {
+            color: #B8860B;
+            text-align: center;
+        }
+        /* Groupes de champs */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        /* Labels */
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        /* Inputs et select */
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        /* Bouton modifier */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        /* Lien retour */
+        .retour {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #B8860B;
+        }
+        /* Info utilisateur en haut */
+        .info-user {
+            background-color: #f9f3e3;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #B8860B;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Titre -->
+        <h1>★ Modifier un Utilisateur ★</h1>
+
+        <!-- Affichage du nom de l'utilisateur qu'on modifie -->
+        <div class="info-user">
+            Modification de : {{ profil.user.username }}
+        </div>
+
+        <!-- Formulaire de modification -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Champ rôle avec la valeur actuelle pré-sélectionnée -->
+            <div class="form-group">
+                <label>Rôle</label>
+                <select name="role" required>
+                    <option value="admin"
+                        {% if profil.role == 'admin' %}selected{% endif %}>
+                        Administrateur
+                    </option>
+                    <option value="directeur"
+                        {% if profil.role == 'directeur' %}selected{% endif %}>
+                        Directeur
+                    </option>
+                    <option value="chef_cuisinier"
+                        {% if profil.role == 'chef_cuisinier' %}selected{% endif %}>
+                        Chef Cuisinier
+                    </option>
+                    <option value="cuisinier"
+                        {% if profil.role == 'cuisinier' %}selected{% endif %}>
+                        Cuisinier
+                    </option>
+                    <option value="serveur"
+                        {% if profil.role == 'serveur' %}selected{% endif %}>
+                        Serveur
+                    </option>
+                    <option value="gestionnaire_stock"
+                        {% if profil.role == 'gestionnaire_stock' %}selected{% endif %}>
+                        Gestionnaire de Stock
+                    </option>
+                </select>
+            </div>
+
+            <!-- Champ téléphone avec valeur actuelle -->
+            <div class="form-group">
+                <label>Téléphone</label>
+                <input type="text" name="telephone"
+                       value="{{ profil.telephone }}"
+                       placeholder="Ex: 6XXXXXXXX">
+            </div>
+
+            <!-- Bouton soumettre -->
+            <button type="submit" class="btn-submit">
+                Enregistrer les modifications
+            </button>
+        </form>
+
+        <!-- Lien retour -->
+        <a href="/restaurant/utilisateurs/" class="retour">
+            ← Retour à la liste
+        </a>
+    </div>
+</body>
+</html>
