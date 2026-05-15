@@ -59,3 +59,77 @@ def commander(request, produit_id):
     return render(request, 'Restaurant/commander.html', {'produit': produit})
 def accueil(request):
     return render(request, 'Restaurant/accueil.html')
+# ==========================================
+# MODULE : USER MANAGEMENT
+# ==========================================
+
+# On importe les outils nécessaires pour gérer les utilisateurs
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+
+# Vue pour afficher la liste de tous les utilisateurs
+@login_required
+def liste_utilisateurs(request):
+    # On récupère tous les profils utilisateurs
+    profils = UserProfile.objects.all()
+    return render(request, 'Restaurant/liste_utilisateurs.html', {'profils': profils})
+
+# Vue pour créer un nouvel utilisateur avec un rôle
+@login_required
+def creer_utilisateur(request):
+    if request.method == 'POST':
+        # On récupère les données du formulaire
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        role = request.POST.get('role')
+        telephone = request.POST.get('telephone')
+
+        # On crée l'utilisateur Django
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        # On crée son profil avec le rôle
+        UserProfile.objects.create(
+            user=user,
+            role=role,
+            telephone=telephone
+        )
+        # On redirige vers la liste après création
+        return redirect('/restaurant/utilisateurs/')
+
+    return render(request, 'Restaurant/creer_utilisateur.html')
+
+# Vue pour modifier le rôle d'un utilisateur
+@login_required
+def modifier_utilisateur(request, user_id):
+    # On cherche le profil de l'utilisateur
+    profil = UserProfile.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        # On met à jour le rôle et le téléphone
+        profil.role = request.POST.get('role')
+        profil.telephone = request.POST.get('telephone')
+        profil.save()
+        return redirect('/restaurant/utilisateurs/')
+
+    return render(request, 'Restaurant/modifier_utilisateur.html', {'profil': profil})
+
+# Vue pour supprimer un utilisateur
+@login_required
+def supprimer_utilisateur(request, user_id):
+    # On cherche et supprime le profil
+    profil = UserProfile.objects.get(id=user_id)
+    profil.user.delete()
+    return redirect('/restaurant/utilisateurs/')
+
+# Vue pour déconnecter un utilisateur
+def deconnexion(request):
+    # On déconnecte l'utilisateur et on redirige vers l'accueil
+    logout(request)
+    return redirect('/restaurant/')
