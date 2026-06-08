@@ -1,0 +1,53 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Modifier {{ produit.Nom }}{% endblock %}
+{% block page_title %}✏️ Modifier : {{ produit.Nom }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'produit_list' %}" style="color:var(--pri);text-decoration:none">Produits</a></li>
+<li class="breadcrumb-item active">Modifier</li>
+{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <h6 class="fw-bold mb-4" style="color:var(--pri)">🍽️ Informations du plat</h6>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="text-danger small">{{ field.errors|join:", " }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" name="save_produit" class="btn btn-pri"><i class="bi bi-check-circle me-2"></i>Enregistrer</button>
+        <a href="{% url 'produit_list' %}" class="btn btn-outline-secondary ms-2">Annuler</a>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <h6 class="fw-bold mb-3" style="color:var(--pri)">🌿 Composition (Ingrédients)</h6>
+      <form method="post" class="d-flex gap-2 mb-3 align-items-end flex-wrap">
+        {% csrf_token %}
+        <div><label class="form-label small fw-bold">Ingrédient</label>{{ compo_form.id_Ingredient }}</div>
+        <div><label class="form-label small fw-bold">Quantité</label>{{ compo_form.Quantite_Utilisee }}</div>
+        <button type="submit" name="add_ingredient" class="btn btn-sm btn-outline-success"><i class="bi bi-plus me-1"></i>Ajouter</button>
+      </form>
+      <table class="table table-sm">
+        <thead style="background:#f8f9fa"><tr><th>Ingrédient</th><th>Quantité</th><th>Unité</th><th></th></tr></thead>
+        <tbody>
+          {% for c in compositions %}
+          <tr>
+            <td>{{ c.id_Ingredient.Nom }}</td>
+            <td>{{ c.Quantite_Utilisee }}</td>
+            <td class="text-muted small">{{ c.id_Ingredient.Unite_de_Mesure }}</td>
+            <td><a href="{% url 'composition_delete' c.pk %}" class="text-danger text-decoration-none">🗑️</a></td>
+          </tr>
+          {% empty %}<tr><td colspan="4" class="text-muted small text-center py-3">Aucun ingrédient</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+ 

@@ -1,0 +1,39 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Ingrédients{% endblock %}
+{% block page_title %}🌿 Ingrédients{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Ingrédients</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'ingredient_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvel ingrédient</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Nom</th><th>Unité de mesure</th><th>Type</th><th>Stock actuel</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for i in ingredients %}
+        <tr>
+          <td>#{{ i.id_Ingredient }}</td>
+          <td><strong>{{ i.Nom }}</strong></td>
+          <td>{{ i.Unite_de_Mesure|default:"—" }}</td>
+          <td><span class="badge bg-light text-dark">{{ i.Type|default:"—" }}</span></td>
+          <td>
+            {% with s=i.stock %}
+            {% if s %}
+              <span class="fw-bold {% if s.en_alerte %}text-danger{% else %}text-success{% endif %}">
+                {{ s.Quantite_Actuelle }}
+              </span>
+            {% else %}—{% endif %}
+            {% endwith %}
+          </td>
+          <td class="text-center">
+            <a href="{% url 'ingredient_update' i.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'ingredient_delete' i.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="6" class="text-center text-muted py-5">Aucun ingrédient</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

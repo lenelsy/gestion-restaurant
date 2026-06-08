@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Confirmer suppression</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.box{background:white;border-radius:16px;padding:48px 40px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.1);max-width:420px;width:100%;}
+.icon{font-size:3.5rem;margin-bottom:16px;}
+h2{color:#1a2744;font-size:1.4rem;margin-bottom:10px;}
+p{color:#888;font-size:0.9rem;margin-bottom:30px;line-height:1.6;}
+p strong{color:#e94560;}
+.btns{display:flex;gap:12px;justify-content:center;}
+.btn{padding:12px 28px;border-radius:8px;border:none;cursor:pointer;font-size:0.9rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.btn-red{background:linear-gradient(135deg,#e94560,#f76b8a);color:white;}
+.btn-gray{background:#6c757d;color:white;}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="icon">⚠️</div>
+  <h2>Confirmer la suppression</h2>
+  <p>Voulez-vous vraiment supprimer <strong>{{ nom }}</strong> ? Cette action est irréversible.</p>
+  <div class="btns">
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-red">🗑️ Supprimer</button>
+    </form>
+    <a href="javascript:history.back()" class="btn btn-gray">← Annuler</a>
+  </div>
+</div>
+</body>
+</html>

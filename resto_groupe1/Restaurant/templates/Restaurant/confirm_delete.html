@@ -1,0 +1,29 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Supprimer{% endblock %}
+{% block page_title %}🗑️ Confirmer la suppression{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Supprimer</li>{% endblock %}
+ 
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-5">
+    <div class="card border-0 text-center p-5" style="border-radius:18px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
+      <div style="font-size:4rem;margin-bottom:16px">🗑️</div>
+      <h4 class="fw-bold text-danger mb-3">Confirmer la suppression</h4>
+      <p class="text-muted mb-4">
+        Voulez-vous vraiment supprimer<br>
+        <strong class="text-dark">{{ objet }}</strong> ?<br>
+        <small class="text-danger">⚠️ Cette action est irréversible.</small>
+      </p>
+      <form method="post" class="d-flex justify-content-center gap-3">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger px-4">
+          <i class="bi bi-trash me-2"></i>Supprimer
+        </button>
+        <a href="{% url back_url %}" class="btn btn-outline-secondary px-4">
+          <i class="bi bi-arrow-left me-2"></i>Annuler
+        </a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

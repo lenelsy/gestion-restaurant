@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Les Délices{% endblock %} — Restaurant</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',sans-serif;background:#f8f9fa}
+    /* NAVBAR */
+    .navbar{background:#1a1a2e;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+    .navbar .brand{color:#f4a825;font-size:1.3rem;font-weight:800;text-decoration:none}
+    .navbar .nav-links{display:flex;align-items:center;gap:8px}
+    .navbar .nav-links a{color:rgba(255,255,255,.8);text-decoration:none;padding:8px 16px;border-radius:8px;font-size:.88rem;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s}
+    .navbar .nav-links a:hover{background:rgba(255,255,255,.1);color:#fff}
+    .navbar .nav-links .btn-panier{background:#f4a825;color:#1a1a2e;border-radius:25px;padding:8px 18px}
+    .navbar .nav-links .btn-panier:hover{background:#e09b1a;color:#1a1a2e}
+    .badge-count{background:#c0392b;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800}
+    /* MESSAGES */
+    .msg-container{max-width:1100px;margin:16px auto;padding:0 20px}
+    .msg{padding:12px 18px;border-radius:10px;margin-bottom:8px;font-size:.9rem;font-weight:500}
+    .msg-success{background:#d4edda;color:#155724}
+    .msg-error,.msg-danger{background:#f8d7da;color:#721c24}
+    .msg-warning{background:#fff3cd;color:#856404}
+    .msg-info{background:#cce5ff;color:#004085}
+    /* FOOTER */
+    .footer{background:#1a1a2e;color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.82rem;margin-top:60px}
+    .footer span{color:#f4a825;font-weight:600}
+    @media print{.navbar,.footer,.no-print{display:none!important}}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="{% url 'accueil' %}" class="brand">🍽️ Les Délices</a>
+  <div class="nav-links">
+    <a href="{% url 'menu_public' %}"><i class="bi bi-grid"></i> Menu</a>
+    <a href="{% url 'valider_commande' %}"><i class="bi bi-bag"></i> Commander</a>
+    <a href="{% url 'reservation_create' %}"><i class="bi bi-calendar-check"></i> Réserver</a>
+    <a href="{% url 'panier_voir' %}" class="btn-panier">
+      🛒 Panier
+      {% with nb=request.session.panier|length %}
+        {% if nb > 0 %}<span class="badge-count">{{ nb }}</span>{% endif %}
+      {% endwith %}
+    </a>
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'dashboard' %}" style="background:rgba(255,255,255,.1);border-radius:8px">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+    {% else %}
+    <a href="{% url 'login' %}" style="background:rgba(255,255,255,.1);border-radius:8px">
+      <i class="bi bi-person-lock"></i> Personnel
+    </a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- MESSAGES -->
+<div class="msg-container">
+  {% for m in messages %}
+  <div class="msg msg-{{ m.tags }}">{{ m }}</div>
+  {% endfor %}
+</div>
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>© 2026 <span>Les Délices du Groupe 1</span> — ENSPY Yaoundé &nbsp;|&nbsp; Cuisine africaine authentique 🇨🇲</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

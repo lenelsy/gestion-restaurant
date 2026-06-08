@@ -1,0 +1,33 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Factures{% endblock %}
+{% block page_title %}🧾 Factures{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Factures</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'facture_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvelle facture</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Date</th><th>Type</th><th>Montant</th><th class="text-center">Suppr.</th></tr></thead>
+      <tbody>
+        {% for f in factures %}
+        <tr>
+          <td><span class="badge bg-secondary">#{{ f.id_Facture }}</span></td>
+          <td>{{ f.Date|date:"d/m/Y" }}</td>
+          <td><span class="badge bg-light text-dark">{{ f.Type }}</span></td>
+          <td>
+            <strong class="{% if 'Client' in f.Type %}text-success{% else %}text-danger{% endif %}">
+              {% if 'Client' in f.Type %}+{% else %}−{% endif %}{{ f.Montant|floatformat:0 }} FCFA
+            </strong>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'facture_delete' f.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="5" class="text-center text-muted py-5">Aucune facture</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

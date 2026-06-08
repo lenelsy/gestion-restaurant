@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ action }} Produit</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;min-height:100vh;}
+.sidebar{width:240px;background:linear-gradient(180deg,#1a2744,#2a3550,#1a3a5c);color:white;position:fixed;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar-logo{padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
+.sidebar-logo h2{font-family:Georgia,serif;font-size:1.3rem;font-weight:900;font-style:italic;color:#b49140;}
+.sidebar-logo p{color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:4px;}
+.nav-section{padding:16px 18px 6px;font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3);font-weight:600;}
+.sidebar a{display:flex;align-items:center;gap:12px;padding:11px 20px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.86rem;transition:all 0.2s;border-left:3px solid transparent;}
+.sidebar a:hover,.sidebar a.active{background:rgba(180,145,64,0.15);color:#e8c870;border-left-color:#b49140;padding-left:24px;}
+.sidebar-footer{position:absolute;bottom:0;width:100%;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.sidebar-footer a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.82rem;padding:8px 0 !important;border-left:none !important;}
+.main{margin-left:240px;flex:1;padding:28px;}
+.topbar{background:white;border-radius:12px;padding:18px 24px;margin-bottom:24px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.topbar h1{font-size:1.4rem;color:#1a2744;font-weight:700;}
+.form-card{background:white;border-radius:14px;padding:32px;box-shadow:0 2px 10px rgba(0,0,0,0.06);max-width:600px;}
+.fg{margin-bottom:18px;}
+.fg label{display:block;font-size:0.8rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:7px;}
+.fg input,.fg select{width:100%;padding:12px 14px;border:1px solid #dee2e6;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;}
+.fg input:focus,.fg select:focus{border-color:#b49140;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.btn{padding:12px 24px;border-radius:8px;border:none;cursor:pointer;font-size:0.9rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
+.btn-gold{background:linear-gradient(135deg,#c9973a,#b8832a);color:white;}
+.btn-gray{background:#6c757d;color:white;}
+.btns{display:flex;gap:12px;margin-top:24px;}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><h2>Les Délices</h2><p>Espace Personnel</p></div>
+  <div class="nav-section">Principal</div>
+  <a href="/personnel/dashboard/">📊 Dashboard</a>
+  <div class="nav-section">Cuisine</div>
+  <a href="/personnel/produits/" class="active">🍽️ Produits</a>
+  <a href="/personnel/ingredients/">🧂 Ingrédients</a>
+  <a href="/personnel/stock/">📦 Stock</a>
+  <div class="sidebar-footer">
+    <a href="/personnel/logout/">🚪 Déconnexion</a>
+  </div>
+</nav>
+<main class="main">
+  <div class="topbar"><h1>🍽️ {{ action }} un produit</h1></div>
+  <div class="form-card">
+    <form method="post">
+      {% csrf_token %}
+      <div class="fg">
+        <label>Nom du produit</label>
+        <input type="text" name="nom" value="{{ produit.Nom|default:'' }}" placeholder="Ex: Poulet DG" required>
+      </div>
+      <div class="form-row">
+        <div class="fg">
+          <label>Type</label>
+          <select name="description">
+            <option value="Plat" {% if produit.Description =='Plat' %}selected{% endif %}>🍽️ Plat</option>
+            <option value="Boisson" {% if produit.Description =='Boisson' %}selected{% endif %}>🥤 Boisson</option>
+            <option value="Dessert" {% if produit.Description =='Dessert' %}selected{% endif %}>🍰 Dessert</option>
+            <option value="Entrée" {% if produit.Description =='Entrée' %}selected{% endif %}>🥗 Entrée</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Prix (F CFA)</label>
+          <input type="number" name="prix" value="{{ produit.Prix|default:0 }}" placeholder="Ex: 5000" min="0" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg">
+          <label>Durée de cuisson</label>
+          <input type="text" name="duree" value="{{ produit.Duree_Cuisson|default:'' }}" placeholder="Ex: 1 heure" required>
+        </div>
+        <div class="fg">
+          <label>Chef créateur</label>
+          <select name="createur">
+            {% for e in employes %}
+            <option value="{{ e.pk }}" {% if produit.id_Createur.pk == e.pk %}selected{% endif %}>
+              {{ e.Prenom }} {{ e.Nom }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="btns">
+        <button type="submit" class="btn btn-gold">💾 {{ action }}</button>
+        <a href="/personnel/produits/" class="btn btn-gray">← Annuler</a>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

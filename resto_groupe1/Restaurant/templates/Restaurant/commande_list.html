@@ -1,0 +1,43 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Commandes{% endblock %}
+{% block page_title %}🧾 Commandes{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Commandes</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'commande_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvelle commande</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Client</th><th>Date</th><th>Type</th><th>Montant</th><th>Paiement</th><th>Statut</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for cmd in commandes %}
+        <tr>
+          <td><span class="badge bg-secondary">#{{ cmd.id_Commande }}</span></td>
+          <td><strong>{{ cmd.id_Client }}</strong></td>
+          <td class="small">{{ cmd.Date|date:"d/m/Y H:i" }}</td>
+          <td>
+            {% if cmd.Type == 'Sur place' %}<span class="badge badge-conf">🪑 {{ cmd.Type }}</span>
+            {% elif cmd.Type == 'À livrer' %}<span class="badge badge-enc">🚚 {{ cmd.Type }}</span>
+            {% else %}<span class="badge badge-att">🥡 {{ cmd.Type }}</span>{% endif %}
+          </td>
+          <td><strong>{{ cmd.Montant_Total|floatformat:0 }} FCFA</strong></td>
+          <td class="small">{{ cmd.Mode_de_Paiement }}</td>
+          <td>
+            {% if cmd.Statut == 'en_cours' %}<span class="badge badge-att">⏳ En cours</span>
+            {% elif cmd.Statut == 'prête' %}<span class="badge badge-enc">✓ Prête</span>
+            {% elif cmd.Statut == 'livrée' %}<span class="badge badge-conf">✅ Livrée</span>
+            {% else %}<span class="badge badge-ann">✗ Annulée</span>{% endif %}
+          </td>
+          <td class="text-center">
+            <a href="{% url 'commande_detail' cmd.pk %}" class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></a>
+            <a href="{% url 'commande_update' cmd.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'commande_delete' cmd.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="8" class="text-center text-muted py-5">Aucune commande</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

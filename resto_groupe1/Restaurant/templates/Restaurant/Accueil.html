@@ -1,141 +1,104 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Les Délices du Groupe 1</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: Georgia, serif;
-            background: #1a1a1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            text-align: center;
-            padding: 60px 40px;
-            background: white;
-            width: 500px;
-            border-top: 6px solid #C9A84C;
-            border-bottom: 6px solid #C9A84C;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-
-        .bienvenue {
-            color: #C9A84C;
-            font-size: 12px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            font-size: 30px;
-            color: #1a1a1a;
-            margin-bottom: 5px;
-        }
-
-        .sous-titre {
-            font-size: 12px;
-            color: #999;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .divider {
-            width: 50px;
-            height: 2px;
-            background: #C9A84C;
-            margin: 0 auto 40px auto;
-        }
-
-        .question {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 35px;
-        }
-
-        .choix {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 20px 30px;
-            width: 180px;
-            border: 2px solid #C9A84C;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: Georgia, serif;
-            font-size: 14px;
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s;
-        }
-
-        .btn-client {
-            background: #C9A84C;
-            color: white;
-        }
-
-        .btn-client:hover {
-            background: #b8943d;
-            border-color: #b8943d;
-        }
-
-        .btn-personnel {
-            background: white;
-            color: #C9A84C;
-        }
-
-        .btn-personnel:hover {
-            background: #C9A84C;
-            color: white;
-        }
-
-        .icon { font-size: 30px; display: block; margin-bottom: 10px; }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 11px;
-            color: #bbb;
-            letter-spacing: 1px;
-        }
-
-        .star { color: #C9A84C; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <p class="bienvenue">✦ Bienvenue ✦</p>
-    <h1>Les Délices</h1>
-    <p class="sous-titre">du Groupe 1</p>
-    <div class="divider"></div>
-
-    <p class="question">Qui êtes-vous ?</p>
-
-    <div class="choix">
-        <a href="/restaurant/catalogue/" class="btn btn-client">
-            <span class="icon">🍽️</span>
-            Je suis<br><strong>Client</strong>
-        </a>
-        <a href="/restaurant/login/" class="btn btn-personnel">
-            <span class="icon">👨‍💼</span>
-            Je suis<br><strong>Personnel</strong>
-        </a>
-    </div>
-
-    <p class="footer">
-        <span class="star">✦</span>
-        Les Délices du Groupe 1
-        <span class="star">✦</span>
+{% extends 'restaurant/base_public.html' %}
+{% block title %}Accueil{% endblock %}
+ 
+{% block content %}
+<!-- HERO -->
+<div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);min-height:88vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 20px;position:relative;overflow:hidden">
+  <!-- Cercles décoratifs -->
+  <div style="position:absolute;width:400px;height:400px;border-radius:50%;border:1px solid rgba(244,168,37,.1);top:-100px;right:-100px"></div>
+  <div style="position:absolute;width:250px;height:250px;border-radius:50%;border:1px solid rgba(244,168,37,.08);bottom:-50px;left:-50px"></div>
+ 
+  <div style="position:relative;z-index:1">
+    <p style="color:#f4a825;font-size:.78rem;font-weight:800;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px">✦ BIENVENUE ✦</p>
+    <h1 style="font-size:3.5rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:18px;font-style:italic">
+      Les Délices<br><span style="color:#f4a825">du Groupe 1</span>
+    </h1>
+    <p style="color:rgba(255,255,255,.65);font-size:1.05rem;max-width:480px;margin:0 auto 36px;line-height:1.7">
+      Cuisine authentique, saveurs inoubliables.<br>Commandez en ligne ou réservez votre table.
     </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="{% url 'valider_commande' %}"
+         style="display:inline-flex;align-items:center;gap:8px;background:#f4a825;color:#1a1a2e;padding:14px 30px;border-radius:50px;font-weight:800;text-decoration:none;font-size:1rem;box-shadow:0 8px 24px rgba(244,168,37,.35)">
+        🛒 Commander maintenant
+      </a>
+      <a href="{% url 'menu_public' %}"
+         style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;padding:14px 30px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1rem;border:2px solid rgba(255,255,255,.4)">
+        🍽️ Voir le menu
+      </a>
+      <a href="{% url 'reservation_create' %}"
+         style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;padding:14px 30px;border-radius:50px;font-weight:700;text-decoration:none;font-size:1rem;border:2px solid rgba(255,255,255,.4)">
+        📅 Réserver une table
+      </a>
+    </div>
+ 
+    <!-- FEATURES -->
+    <div style="display:flex;gap:36px;justify-content:center;margin-top:60px;flex-wrap:wrap">
+      <div style="text-align:center;color:rgba(255,255,255,.7)">
+        <div style="font-size:2rem;margin-bottom:8px">🍖</div>
+        <div style="font-size:.82rem;font-weight:600">Cuisine Africaine</div>
+      </div>
+      <div style="text-align:center;color:rgba(255,255,255,.7)">
+        <div style="font-size:2rem;margin-bottom:8px">📅</div>
+        <div style="font-size:.82rem;font-weight:600">Réservation en ligne</div>
+      </div>
+      <div style="text-align:center;color:rgba(255,255,255,.7)">
+        <div style="font-size:2rem;margin-bottom:8px">🚚</div>
+        <div style="font-size:.82rem;font-weight:600">Livraison à domicile</div>
+      </div>
+      <div style="text-align:center;color:rgba(255,255,255,.7)">
+        <div style="font-size:2rem;margin-bottom:8px">⭐</div>
+        <div style="font-size:.82rem;font-weight:600">Qualité garantie</div>
+      </div>
+    </div>
+  </div>
 </div>
-</body>
-</html>
+ 
+<!-- SECTION : COMMENT ÇA MARCHE -->
+<div style="max-width:1000px;margin:70px auto;padding:0 20px;text-align:center">
+  <p style="color:#f4a825;font-size:.75rem;font-weight:800;letter-spacing:3px;text-transform:uppercase">Comment commander ?</p>
+  <h2 style="font-size:2rem;font-weight:800;color:#1a1a2e;margin-bottom:40px">Simple, rapide, savoureux</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
+    {% for num, ico, titre, desc in steps %}
+    <div style="background:#fff;border-radius:16px;padding:28px 20px;box-shadow:0 4px 20px rgba(0,0,0,.07);text-align:center">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f4a825,#e67e22);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem">{{ ico }}</div>
+      <div style="font-size:.7rem;font-weight:800;color:#f4a825;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Étape {{ num }}</div>
+      <h5 style="font-weight:700;color:#1a1a2e;margin-bottom:8px">{{ titre }}</h5>
+      <p style="color:#888;font-size:.85rem;line-height:1.6">{{ desc }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+ 
+<!-- MODES DE SERVICE -->
+<div style="background:#1a1a2e;padding:60px 20px;text-align:center">
+  <p style="color:#f4a825;font-size:.75rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px">Nos services</p>
+  <h2 style="font-size:2rem;font-weight:800;color:#fff;margin-bottom:40px">Comme vous le souhaitez</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:800px;margin:0 auto">
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 20px">
+      <div style="font-size:2.5rem;margin-bottom:12px">🪑</div>
+      <h5 style="color:#f4a825;font-weight:700;margin-bottom:8px">Sur place</h5>
+      <p style="color:rgba(255,255,255,.6);font-size:.85rem">Profitez de notre ambiance chaleureuse. Réservez votre table à l'avance.</p>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 20px">
+      <div style="font-size:2.5rem;margin-bottom:12px">🥡</div>
+      <h5 style="color:#f4a825;font-weight:700;margin-bottom:8px">À emporter</h5>
+      <p style="color:rgba(255,255,255,.6);font-size:.85rem">Commandez en ligne, récupérez en 20 minutes. Pratique et rapide.</p>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 20px">
+      <div style="font-size:2.5rem;margin-bottom:12px">🚚</div>
+      <h5 style="color:#f4a825;font-weight:700;margin-bottom:8px">Livraison</h5>
+      <p style="color:rgba(255,255,255,.6);font-size:.85rem">Livraison à domicile dans un rayon de 5 km. Délai : 30-45 min.</p>
+    </div>
+  </div>
+</div>
+ 
+<!-- CTA FINAL -->
+<div style="text-align:center;padding:70px 20px;background:#f8f9fa">
+  <h2 style="font-size:2rem;font-weight:800;color:#1a1a2e;margin-bottom:10px">Prêt à commander ?</h2>
+  <p style="color:#888;margin-bottom:28px">Découvrez notre menu et composez votre repas idéal</p>
+  <a href="{% url 'menu_public' %}"
+     style="display:inline-flex;align-items:center;gap:10px;background:#f4a825;color:#1a1a2e;padding:15px 36px;border-radius:50px;font-weight:800;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 24px rgba(244,168,37,.35)">
+    🍽️ Voir le menu complet
+  </a>
+</div>
+{% endblock %}

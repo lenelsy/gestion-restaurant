@@ -1,0 +1,37 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Clients{% endblock %}
+{% block page_title %}👥 Clients{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Clients</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <form method="get" class="d-flex gap-2">
+    <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Rechercher..." style="width:260px">
+    <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
+    {% if q %}<a href="{% url 'client_list' %}" class="btn btn-outline-danger"><i class="bi bi-x"></i></a>{% endif %}
+  </form>
+  <a href="{% url 'client_create' %}" class="btn btn-pri"><i class="bi bi-person-plus me-2"></i>Nouveau client</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>ID</th><th>Nom complet</th><th>Téléphone</th><th>Email</th><th>Type</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for c in clients %}
+        <tr>
+          <td><span class="badge bg-secondary">#{{ c.id_Client }}</span></td>
+          <td><strong>{{ c.Prenom }} {{ c.Nom }}</strong></td>
+          <td>{{ c.Tel|default:"—" }}</td>
+          <td>{{ c.Email|default:"—" }}</td>
+          <td><span class="badge {% if c.Type_de_Client == 'Entreprise' %}badge-enc{% else %}badge-conf{% endif %}">{{ c.Type_de_Client }}</span></td>
+          <td class="text-center">
+            <a href="{% url 'client_update' c.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'client_delete' c.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="6" class="text-center text-muted py-5">Aucun client</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer bg-white text-muted small px-4 py-2">{{ clients|length }} client(s)</div>
+</div>
+{% endblock %}

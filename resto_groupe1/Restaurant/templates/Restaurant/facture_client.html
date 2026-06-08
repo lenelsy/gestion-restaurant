@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facture — Les Délices</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.facture{background:white;border-radius:20px;padding:50px 44px;max-width:560px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.12);}
+.facture-header{text-align:center;margin-bottom:28px;}
+.success-icon{font-size:4rem;display:block;margin-bottom:12px;}
+.facture-header h1{font-family:Georgia,serif;font-size:1.8rem;font-style:italic;color:#1a2744;margin-bottom:6px;}
+.facture-header p{color:#888;font-size:0.88rem;}
+.facture-num{background:linear-gradient(135deg,#f5f0e8,#ede4d0);border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(180,145,64,0.2);}
+.facture-num span{font-size:0.78rem;color:#888;text-transform:uppercase;letter-spacing:1px;}
+.facture-num strong{color:#b49140;font-size:1.2rem;font-weight:900;}
+.section-title{font-size:0.8rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin:18px 0 10px;}
+.row{display:flex;justify-content:space-between;padding:8px 0;font-size:0.9rem;border-bottom:1px solid #f0f2f5;}
+.row:last-child{border-bottom:none;}
+.row span{color:#888;}
+.row strong{color:#1a2744;}
+.lignes-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.lignes-table th{background:#f8f9fa;padding:8px 12px;text-align:left;font-size:0.75rem;font-weight:700;color:#555;text-transform:uppercase;}
+.lignes-table td{padding:10px 12px;border-bottom:1px solid #f0f2f5;font-size:0.88rem;}
+.lignes-table tr:last-child td{border-bottom:none;}
+.total-row{display:flex;justify-content:space-between;padding:16px 0 8px;margin-top:8px;border-top:2px solid #f5f0e8;}
+.total-row span{font-size:1rem;font-weight:700;color:#1a2744;}
+.total-row strong{font-size:1.5rem;font-weight:900;color:#b49140;}
+.merci{text-align:center;margin-top:24px;padding:18px;background:linear-gradient(135deg,#f5f0e8,#ede4d0);border-radius:12px;}
+.merci p{font-family:Georgia,serif;font-style:italic;color:#b49140;font-size:1rem;}
+.merci small{color:#888;font-size:0.78rem;display:block;margin-top:4px;}
+.btns{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+.btn{padding:12px;border-radius:10px;font-size:0.88rem;font-weight:700;text-decoration:none;text-align:center;flex:1;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all 0.3s;}
+.btn-gold{background:linear-gradient(135deg,#c9973a,#b8832a);color:white;}
+.btn-dark{background:linear-gradient(135deg,#1a2744,#2a3550);color:white;}
+.btn-gray{background:#f0f2f5;color:#555;}
+@media print{.btns{display:none;}.facture{box-shadow:none;border-radius:0;}}
+</style>
+</head>
+<body>
+<div class="facture">
+  <div class="facture-header">
+    <span class="success-icon">✅</span>
+    <h1>Commande confirmée !</h1>
+    <p>Votre facture a été générée automatiquement</p>
+  </div>
+
+  <div class="facture-num">
+    <span>🧾 N° Facture</span>
+    <strong>#{{ facture.id_Facture }}</strong>
+  </div>
+
+  <div class="row">
+    <span>📅 Date</span>
+    <strong>{{ facture.Date }}</strong>
+  </div>
+  {% if commande %}
+  <div class="row">
+    <span>👤 Client</span>
+    <strong>{{ commande.id_Client.Prenom }} {{ commande.id_Client.Nom }}</strong>
+  </div>
+  <div class="row">
+    <span>🚀 Mode</span>
+    <strong>{{ commande.Type }}</strong>
+  </div>
+  <div class="row">
+    <span>💳 Paiement</span>
+    <strong>{{ commande.Mode_de_Paiement }}</strong>
+  </div>
+
+  {% if lignes %}
+  <div class="section-title">🍽️ Détail de la commande</div>
+  <table class="lignes-table">
+    <thead>
+      <tr>
+        <th>Plat</th>
+        <th>Qté</th>
+        <th>Prix unit.</th>
+        <th>Sous-total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in lignes %}
+      <tr>
+        <td>{{ l.id_Produit.Nom }}</td>
+        <td>{{ l.Quantite }}</td>
+        <td>{{ l.Prix_Unitaire }} F</td>
+        <td><strong>{{ l.Quantite|add:0 }} × {{ l.Prix_Unitaire }} F</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% endif %}
+
+  <div class="total-row">
+    <span>💰 Total à payer</span>
+    <strong>{{ facture.Montant }} F CFA</strong>
+  </div>
+
+  <div class="merci">
+    <p>✦ &nbsp; Bonne dégustation ! &nbsp; ✦</p>
+    <small>Les Délices du Groupe 1 — Cuisine authentique</small>
+  </div>
+
+  <div class="btns">
+    <a href="/Restaurant/commander/" class="btn btn-gray">🍽️ Nouvelle commande</a>
+    <button onclick="window.print()" class="btn btn-dark">🖨️ Imprimer</button>
+    <a href="/Restaurant/" class="btn btn-gold">🏠 Accueil</a>
+  </div>
+</div>
+</body>
+</html>

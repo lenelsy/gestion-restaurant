@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fournisseurs</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;min-height:100vh;}
+.sidebar{width:240px;background:linear-gradient(180deg,#1a2744,#2a3550,#1a3a5c);color:white;position:fixed;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar-logo{padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
+.sidebar-logo h2{font-family:Georgia,serif;font-size:1.3rem;font-weight:900;font-style:italic;color:#b49140;}
+.nav-section{padding:16px 18px 6px;font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3);font-weight:600;}
+.sidebar a{display:flex;align-items:center;gap:12px;padding:11px 20px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.86rem;transition:all 0.2s;border-left:3px solid transparent;}
+.sidebar a:hover,.sidebar a.active{background:rgba(180,145,64,0.15);color:#e8c870;border-left-color:#b49140;padding-left:24px;}
+.sidebar-footer{position:absolute;bottom:0;width:100%;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.sidebar-footer a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.82rem;padding:8px 0 !important;border-left:none !important;}
+.main{margin-left:240px;flex:1;padding:28px;}
+.topbar{background:white;border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.topbar h1{font-size:1.4rem;color:#1a2744;font-weight:700;}
+.btn{padding:10px 20px;border-radius:8px;border:none;cursor:pointer;font-size:0.88rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.btn-gold{background:linear-gradient(135deg,#c9973a,#b8832a);color:white;}
+.btn-blue{background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+.btn-sm{padding:6px 12px;font-size:0.78rem;}
+.card{background:white;border-radius:14px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+table{width:100%;border-collapse:collapse;font-size:0.84rem;}
+th{background:#f8f9fa;padding:10px 12px;text-align:left;font-weight:600;color:#555;font-size:0.75rem;text-transform:uppercase;}
+td{padding:11px 12px;border-bottom:1px solid #f0f2f5;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fafbff;}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><h2>Les Délices</h2><p>Espace Personnel</p></div>
+  <div class="nav-section">Principal</div>
+  <a href="/personnel/dashboard/">📊 Dashboard</a>
+  <div class="nav-section">Cuisine</div>
+  <a href="/personnel/produits/">🍽️ Produits</a>
+  <a href="/personnel/ingredients/">🧂 Ingrédients</a>
+  <a href="/personnel/stock/">📦 Stock</a>
+  <a href="/personnel/fournisseurs/" class="active">🏪 Fournisseurs</a>
+  <div class="sidebar-footer">
+    <a href="/admin/">⚙️ Administration</a>
+    <a href="/personnel/logout/">🚪 Déconnexion</a>
+  </div>
+</nav>
+<main class="main">
+  <div class="topbar">
+    <div><h1>🏪 Fournisseurs</h1></div>
+    <a href="/personnel/fournisseurs/ajouter/" class="btn btn-gold">➕ Nouveau fournisseur</a>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>Nom</th><th>Téléphone</th><th>Adresse</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for f in fournisseurs %}
+        <tr>
+          <td>{{ f.id_Fournisseur }}</td>
+          <td><strong>{{ f.Nom }}</strong></td>
+          <td>{{ f.Tel }}</td>
+          <td>{{ f.Adresse }}</td>
+          <td><a href="/personnel/fournisseurs/{{ f.pk }}/modifier/" class="btn btn-blue btn-sm">✏️ Modifier</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align:center;color:#888;padding:30px;">Aucun fournisseur</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,170 @@
+{% extends 'restaurant/base_public.html' %}
+{% block title %}Finaliser la commande{% endblock %}
+ 
+{% block content %}
+<div style="max-width:960px;margin:40px auto;padding:0 20px">
+  <h2 style="font-weight:800;color:#1a1a2e;margin-bottom:6px">✅ Finaliser la commande</h2>
+  <p style="color:#888;margin-bottom:30px">Renseignez vos informations et choisissez le mode de service.</p>
+ 
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start">
+ 
+    <!-- ═══ FORMULAIRE ═══ -->
+    <div style="background:#fff;border-radius:18px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <form method="post" id="form-commande">
+        {% csrf_token %}
+ 
+        <!-- Infos client -->
+        <h5 style="font-weight:800;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f4a825">
+          👤 Vos informations
+        </h5>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div>
+            <label style="font-size:.8rem;font-weight:700;color:#555;display:block;margin-bottom:5px">Nom *</label>
+            <input type="text" name="nom" required placeholder="DUPONT"
+                   style="width:100%;padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;outline:none"
+                   onfocus="this.style.borderColor='#f4a825'" onblur="this.style.borderColor='#eee'">
+          </div>
+          <div>
+            <label style="font-size:.8rem;font-weight:700;color:#555;display:block;margin-bottom:5px">Prénom *</label>
+            <input type="text" name="prenom" required placeholder="Jean"
+                   style="width:100%;padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;outline:none"
+                   onfocus="this.style.borderColor='#f4a825'" onblur="this.style.borderColor='#eee'">
+          </div>
+        </div>
+        <div style="margin-bottom:24px">
+          <label style="font-size:.8rem;font-weight:700;color:#555;display:block;margin-bottom:5px">Téléphone</label>
+          <input type="tel" name="tel" placeholder="6XXXXXXXX"
+                 style="width:100%;padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;outline:none"
+                 onfocus="this.style.borderColor='#f4a825'" onblur="this.style.borderColor='#eee'">
+        </div>
+ 
+        <!-- TYPE DE COMMANDE -->
+        <h5 style="font-weight:800;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f4a825">
+          🚀 Mode de service
+        </h5>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+ 
+          <label style="cursor:pointer">
+            <input type="radio" name="type_commande" value="Sur place" class="type-radio" checked style="display:none">
+            <div class="type-card" data-val="Sur place"
+                 style="border:2px solid #1a1a2e;border-radius:14px;padding:16px 10px;text-align:center;background:#1a1a2e;color:#fff;transition:all .2s">
+              <div style="font-size:2rem">🪑</div>
+              <div style="font-size:.82rem;font-weight:700;margin-top:8px">Sur place</div>
+              <div style="font-size:.7rem;opacity:.7;margin-top:3px">Table réservée</div>
+            </div>
+          </label>
+ 
+          <label style="cursor:pointer">
+            <input type="radio" name="type_commande" value="À emporter" class="type-radio" style="display:none">
+            <div class="type-card" data-val="À emporter"
+                 style="border:2px solid #e0e0e0;border-radius:14px;padding:16px 10px;text-align:center;background:#fff;color:#333;transition:all .2s">
+              <div style="font-size:2rem">🥡</div>
+              <div style="font-size:.82rem;font-weight:700;margin-top:8px">À emporter</div>
+              <div style="font-size:.7rem;color:#999;margin-top:3px">Prêt en 20 min</div>
+            </div>
+          </label>
+ 
+          <label style="cursor:pointer">
+            <input type="radio" name="type_commande" value="À livrer" class="type-radio" style="display:none">
+            <div class="type-card" data-val="À livrer"
+                 style="border:2px solid #e0e0e0;border-radius:14px;padding:16px 10px;text-align:center;background:#fff;color:#333;transition:all .2s">
+              <div style="font-size:2rem">🚚</div>
+              <div style="font-size:.82rem;font-weight:700;margin-top:8px">Livraison</div>
+              <div style="font-size:.7rem;color:#999;margin-top:3px">À domicile</div>
+            </div>
+          </label>
+ 
+        </div>
+ 
+        <!-- ADRESSE (livraison seulement) -->
+        <div id="bloc-adresse" style="display:none;margin-bottom:20px">
+          <label style="font-size:.8rem;font-weight:700;color:#555;display:block;margin-bottom:5px">📍 Adresse de livraison *</label>
+          <textarea name="adresse" rows="2" placeholder="Quartier, rue, point de repère..."
+                    style="width:100%;padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;outline:none;resize:none"
+                    onfocus="this.style.borderColor='#f4a825'" onblur="this.style.borderColor='#eee'"></textarea>
+        </div>
+ 
+        <!-- PAIEMENT -->
+        <h5 style="font-weight:800;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f4a825">
+          💳 Mode de paiement
+        </h5>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.88rem;font-weight:600;transition:border-color .2s"
+                 onmouseover="this.style.borderColor='#f4a825'" onmouseout="this.style.borderColor='#eee'">
+            <input type="radio" name="paiement" value="Espèces" checked> 💵 Espèces
+          </label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.88rem;font-weight:600;transition:border-color .2s"
+                 onmouseover="this.style.borderColor='#f4a825'" onmouseout="this.style.borderColor='#eee'">
+            <input type="radio" name="paiement" value="Orange Money"> 🟠 Orange Money
+          </label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.88rem;font-weight:600;transition:border-color .2s"
+                 onmouseover="this.style.borderColor='#f4a825'" onmouseout="this.style.borderColor='#eee'">
+            <input type="radio" name="paiement" value="MTN MoMo"> 🟡 MTN MoMo
+          </label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.88rem;font-weight:600;transition:border-color .2s"
+                 onmouseover="this.style.borderColor='#f4a825'" onmouseout="this.style.borderColor='#eee'">
+            <input type="radio" name="paiement" value="Carte Bancaire"> 💳 Carte Bancaire
+          </label>
+        </div>
+ 
+        <button type="submit"
+                style="width:100%;padding:15px;background:#f4a825;color:#1a1a2e;border:none;border-radius:14px;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(244,168,37,.35);transition:all .2s"
+                onmouseover="this.style.background='#e09b1a'" onmouseout="this.style.background='#f4a825'">
+          🧾 Confirmer et générer la facture
+        </button>
+      </form>
+    </div>
+ 
+    <!-- ═══ RÉCAPITULATIF ═══ -->
+    <div style="background:#1a1a2e;border-radius:18px;padding:26px;color:#fff;position:sticky;top:84px">
+      <h5 style="font-weight:800;color:#f4a825;margin-bottom:20px;font-size:1.05rem">🧾 Récapitulatif</h5>
+ 
+      {% for item in items %}
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div style="flex:1;padding-right:10px">
+          <div style="font-weight:600;font-size:.92rem">{{ item.nom }}</div>
+          <div style="font-size:.74rem;color:rgba(255,255,255,.45);margin-top:2px">
+            {{ item.quantite }} × {{ item.prix|floatformat:0 }} FCFA
+          </div>
+        </div>
+        <div style="font-weight:700;color:#f4a825;white-space:nowrap">{{ item.sous_total|floatformat:0 }} FCFA</div>
+      </div>
+      {% endfor %}
+ 
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:18px;margin-top:6px">
+        <span style="font-weight:700;font-size:1rem;color:rgba(255,255,255,.7)">TOTAL</span>
+        <span style="font-weight:800;font-size:1.6rem;color:#f4a825">{{ total|floatformat:0 }}<small style="font-size:.8rem"> FCFA</small></span>
+      </div>
+ 
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)">
+        <div style="font-size:.76rem;color:rgba(255,255,255,.4);text-align:center">
+          🔒 Paiement sécurisé &nbsp;|&nbsp; CSRF activé
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script>
+// Sélection visuelle du mode de service
+document.querySelectorAll('.type-radio').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    // Reset tous les cards
+    document.querySelectorAll('.type-card').forEach(function(card) {
+      card.style.borderColor = '#e0e0e0';
+      card.style.background  = '#fff';
+      card.style.color       = '#333';
+    });
+    // Activer le card sélectionné
+    var card = this.nextElementSibling;
+    card.style.borderColor = '#1a1a2e';
+    card.style.background  = '#1a1a2e';
+    card.style.color       = '#fff';
+    // Afficher/masquer adresse
+    document.getElementById('bloc-adresse').style.display =
+      (this.value === 'À livrer') ? 'block' : 'none';
+  });
+});
+</script>
+{% endblock %}

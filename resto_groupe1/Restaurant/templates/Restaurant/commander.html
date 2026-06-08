@@ -1,42 +1,92 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Commander — Les Délices du Groupe 1</title>
-    <style>
-        body { font-family: Georgia, serif; background: #f9f9f9; padding: 30px; }
-        h1 { color: #C9A84C; text-align: center; }
-        .form-card {
-            border: 1px solid #ddd; margin: 20px auto;
-            padding: 30px; border-radius: 8px;
-            width: 400px; background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        h2 { color: #1a1a1a; }
-        .prix { color: #C9A84C; font-weight: bold; font-size: 1.3em; }
-        label { display: block; margin-top: 15px; color: #666; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; font-family: Georgia, serif; }
-        .btn { background: #C9A84C; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 20px; font-size: 15px; font-family: Georgia, serif; }
-        .btn:hover { background: #b8943d; }
-        a { color: #C9A84C; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Délices — Commander</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#faf8f3;}
+nav{background:linear-gradient(135deg,#1a2744,#2a3550);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,0.2);position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:Georgia,serif;font-size:1.5rem;font-weight:900;font-style:italic;color:#b49140;text-decoration:none;}
+.nav-links{display:flex;gap:8px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;padding:8px 18px;border-radius:25px;font-size:0.88rem;transition:all 0.25s;}
+.nav-links a:hover{background:rgba(180,145,64,0.25);color:#e8c870;}
+.nav-btn{background:linear-gradient(135deg,#c9973a,#b8832a);color:white !important;font-weight:700 !important;}
+.panier-badge{background:rgba(255,255,255,0.15);color:white !important;border:1px solid rgba(255,255,255,0.3);}
+.section{padding:50px 40px;max-width:1200px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:44px;}
+.tag{color:#b49140;font-size:0.72rem;letter-spacing:6px;text-transform:uppercase;font-family:Georgia,serif;margin-bottom:10px;display:block;}
+.section-header h1{font-family:Georgia,serif;font-size:2.2rem;font-weight:900;font-style:italic;color:#1a2744;margin-bottom:10px;}
+.divider{width:70px;height:2px;background:linear-gradient(90deg,transparent,#b49140,transparent);margin:0 auto;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px;}
+.menu-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:transform 0.3s,box-shadow 0.3s;border:1px solid rgba(180,145,64,0.12);}
+.menu-card:hover{transform:translateY(-6px);box-shadow:0 12px 35px rgba(0,0,0,0.12);}
+.card-top{background:linear-gradient(135deg,#1a2744,#2a3550);padding:28px 20px;text-align:center;}
+.card-emoji{font-size:3rem;display:block;margin-bottom:8px;}
+.card-type{background:rgba(180,145,64,0.3);color:#e8c870;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;padding:3px 14px;border-radius:20px;display:inline-block;}
+.card-body{padding:22px;}
+.card-body h3{font-family:Georgia,serif;font-size:1.2rem;font-style:italic;color:#1a2744;margin-bottom:8px;}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.tag-sm{background:#f5f0e8;color:#b49140;font-size:0.73rem;padding:4px 10px;border-radius:20px;font-weight:600;}
+.prix-affiche{font-size:1.3rem;font-weight:900;color:#b49140;margin-bottom:14px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:0.78rem;font-weight:600;color:#555;text-transform:uppercase;margin-bottom:6px;}
+.fg input{width:100%;padding:10px 13px;border:1px solid #dee2e6;border-radius:8px;font-size:0.9rem;outline:none;transition:border-color 0.2s;}
+.fg input:focus{border-color:#b49140;}
+.btn-cmd{display:block;text-align:center;background:linear-gradient(135deg,#c9973a,#b8832a);color:white;padding:12px;border-radius:8px;font-weight:700;font-size:0.88rem;border:none;cursor:pointer;width:100%;transition:all 0.3s;}
+.btn-cmd:hover{box-shadow:0 4px 15px rgba(180,130,40,0.45);transform:translateY(-2px);}
+footer{background:#111827;padding:25px;text-align:center;color:rgba(255,255,255,0.3);font-size:0.82rem;}
+footer span{color:#b49140;}
+</style>
 </head>
 <body>
-    <h1>✦ Commander ✦</h1>
-    <div class="form-card">
-        <h2>{{ produit.nom }}</h2>
-        <p class="prix">{{ produit.prix }} FCFA</p>
-        <form method="post">
-            {% csrf_token %}
-            <label>Votre nom</label>
-            <input type="text" name="nom_client" placeholder="Ex: Jean Dupont" required>
+<nav>
+  <a href="/Restaurant/" class="nav-logo">Les Délices</a>
+  <div class="nav-links">
+    <a href="/Restaurant/commander/">🍽️ Menu</a>
+    <a href="/Restaurant/panier/" class="panier-badge">🧺 Panier</a>
+    <a href="/Restaurant/reserver/">📅 Réserver</a>
+    <a href="/personnel/login/" class="nav-btn">👔 Personnel</a>
+  </div>
+</nav>
+
+<div class="section">
+  <div class="section-header">
+    <span class="tag">✦ Nos Plats ✦</span>
+    <h1>Choisissez vos plats</h1>
+    <div class="divider"></div>
+  </div>
+  <div class="menu-grid">
+    {% for p in produits %}
+    <div class="menu-card">
+      <div class="card-top">
+        {% if p.Description == 'Boisson' %}<span class="card-emoji">🥤</span>
+        {% elif p.Description == 'Dessert' %}<span class="card-emoji">🍰</span>
+        {% elif p.Description == 'Entrée' %}<span class="card-emoji">🥗</span>
+        {% else %}<span class="card-emoji">🍽️</span>{% endif %}
+        <span class="card-type">{{ p.Description }}</span>
+      </div>
+      <div class="card-body">
+        <h3>{{ p.Nom }}</h3>
+        <div class="meta">
+          <span class="tag-sm">⏱ {{ p.Duree_Cuisson }}</span>
+        </div>
+        <div class="prix-affiche">{{ p.Prix }} F CFA</div>
+        <form method="post" action="/Restaurant/panier/ajouter/{{ p.pk }}/">
+          {% csrf_token %}
+          <div class="fg">
             <label>Quantité</label>
-            <input type="number" name="quantite" value="1" min="1" required>
-            <button type="submit" class="btn">Confirmer la commande</button>
+            <input type="number" name="quantite" value="1" min="1" max="20" required>
+          </div>
+          <button type="submit" class="btn-cmd">🛒 Ajouter au panier</button>
         </form>
+      </div>
     </div>
-    <p style="text-align:center; margin-top:20px;">
-        <a href="/restaurant/catalogue/">← Retour au catalogue</a>
-    </p>
+    {% endfor %}
+  </div>
+</div>
+
+<footer>✦ &nbsp; <span>Les Délices du Groupe 1</span> &nbsp; ✦</footer>
 </body>
 </html>

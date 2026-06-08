@@ -1,0 +1,39 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Stocks{% endblock %}
+{% block page_title %}📦 Gestion des Stocks{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Stocks</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4 gap-2">
+  <a href="{% url 'variation_stock_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvelle variation</a>
+  <a href="{% url 'variation_stock_list' %}" class="btn btn-outline-secondary"><i class="bi bi-clock-history me-2"></i>Historique</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>Ingrédient</th><th>Unité</th><th>Quantité actuelle</th><th>Seuil alerte</th><th>Niveau</th><th>Statut</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for s in stocks %}
+        <tr>
+          <td><strong>{{ s.id_Ingredient.Nom }}</strong></td>
+          <td class="small text-muted">{{ s.id_Ingredient.Unite_de_Mesure|default:"—" }}</td>
+          <td><strong>{{ s.Quantite_Actuelle }}</strong></td>
+          <td>{{ s.Seuil_Alerte }}</td>
+          <td style="width:120px">
+            <div class="progress" style="height:8px;border-radius:4px">
+              <div class="progress-bar {% if s.en_alerte %}bg-danger{% else %}bg-success{% endif %}" style="width:{{ s.pourcentage }}%"></div>
+            </div>
+          </td>
+          <td>
+            {% if s.en_alerte %}<span class="badge badge-alert"><i class="bi bi-exclamation-triangle me-1"></i>ALERTE</span>
+            {% else %}<span class="badge badge-ok"><i class="bi bi-check-circle me-1"></i>OK</span>{% endif %}
+          </td>
+          <td class="text-center">
+            <a href="{% url 'stock_update' s.pk %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="7" class="text-center text-muted py-5">Aucun stock enregistré</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

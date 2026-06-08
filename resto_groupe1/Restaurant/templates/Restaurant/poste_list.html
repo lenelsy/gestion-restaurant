@@ -1,0 +1,20 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Postes{% endblock %}
+{% block page_title %}💼 Postes{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Postes</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'poste_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouveau poste</a>
+</div>
+<div class="row g-3">
+  {% for p in postes %}
+  <div class="col-md-3">
+    <div class="card border-0 text-center p-4" style="border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.07)">
+      <div style="font-size:2rem;margin-bottom:8px">💼</div>
+      <h6 class="fw-bold">{{ p.Libelle_Poste }}</h6>
+      <div class="badge badge-enc mt-1">{{ p.nb }} employé(s)</div>
+    </div>
+  </div>
+  {% empty %}<div class="col-12 text-center text-muted py-5">Aucun poste</div>{% endfor %}
+</div>
+{% endblock %}

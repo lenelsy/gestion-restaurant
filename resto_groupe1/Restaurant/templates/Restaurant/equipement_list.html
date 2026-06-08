@@ -1,0 +1,31 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Équipements{% endblock %}
+{% block page_title %}🔧 Équipements{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Équipements</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'equipement_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvel équipement</a>
+</div>
+<div class="row g-3">
+  {% for e in equipements %}
+  <div class="col-md-4">
+    <div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07);border-top:4px solid {% if e.Etat == 'Fonctionnel' %}#28a745{% elif e.Etat == 'En panne' %}#dc3545{% else %}#ffc107{% endif %}">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h6 class="fw-bold mb-0">{{ e.Nom }}</h6>
+        <span style="font-size:1.8rem">🔧</span>
+      </div>
+      <div class="mb-2">
+        {% if e.Etat == 'Fonctionnel' %}<span class="badge badge-conf">✓ {{ e.Etat }}</span>
+        {% elif e.Etat == 'En panne' %}<span class="badge badge-ann">✗ {{ e.Etat }}</span>
+        {% else %}<span class="badge badge-att">⏳ {{ e.Etat }}</span>{% endif %}
+      </div>
+      <div class="small text-muted mb-3">Acheté le : {{ e.Date_Achat|date:"d/m/Y"|default:"—" }}</div>
+      <div class="d-flex gap-2">
+        <a href="{% url 'equipement_update' e.pk %}" class="btn btn-sm btn-outline-primary flex-fill"><i class="bi bi-pencil me-1"></i>Modifier</a>
+        <a href="{% url 'equipement_delete' e.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+      </div>
+    </div>
+  </div>
+  {% empty %}<div class="col-12 text-center text-muted py-5">Aucun équipement</div>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'restaurant/base_public.html' %}
+{% block title %}Facture #{{ commande.id_Commande }}{% endblock %}
+ 
+{% block content %}
+<div style="max-width:720px;margin:40px auto;padding:0 20px">
+ 
+  <!-- SUCCÈS -->
+  <div style="background:linear-gradient(135deg,#d4edda,#c3e6cb);border-radius:16px;padding:22px 28px;margin-bottom:28px;text-align:center" class="no-print">
+    <div style="font-size:3rem">✅</div>
+    <h3 style="color:#155724;font-weight:800;margin:10px 0 6px">Commande confirmée !</h3>
+    <p style="color:#155724;font-size:.92rem;margin:0">
+      Votre commande <strong>#{{ commande.id_Commande }}</strong> a bien été enregistrée.
+    </p>
+  </div>
+ 
+  <!-- BADGE TYPE -->
+  <div style="text-align:center;margin-bottom:20px" class="no-print">
+    {% if commande.Type == 'Sur place' %}
+    <span style="background:#1a1a2e;color:#fff;padding:10px 28px;border-radius:50px;font-weight:700;font-size:.95rem">🪑 Sur place — Votre table sera prête</span>
+    {% elif commande.Type == 'À livrer' %}
+    <span style="background:#0f3460;color:#fff;padding:10px 28px;border-radius:50px;font-weight:700;font-size:.95rem">🚚 Livraison à domicile — 30-45 min</span>
+    {% else %}
+    <span style="background:#f4a825;color:#1a1a2e;padding:10px 28px;border-radius:50px;font-weight:700;font-size:.95rem">🥡 À emporter — Prêt dans 20 min</span>
+    {% endif %}
+  </div>
+ 
+  <!-- FACTURE IMPRIMABLE -->
+  <div id="facture" style="background:#fff;border-radius:18px;box-shadow:0 6px 30px rgba(0,0,0,.1);overflow:hidden">
+ 
+    <!-- EN-TÊTE FACTURE -->
+    <div style="background:#1a1a2e;padding:30px 36px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:1.7rem;font-weight:800;color:#f4a825">🍽️ Les Délices</div>
+          <div style="color:rgba(255,255,255,.55);font-size:.82rem;margin-top:4px">Restaurant — Yaoundé, Cameroun</div>
+          <div style="color:rgba(255,255,255,.55);font-size:.82rem">Tél : +237 6XX XXX XXX</div>
+        </div>
+        <div style="text-align:right">
+          <div style="color:rgba(255,255,255,.6);font-size:.8rem;text-transform:uppercase;letter-spacing:1px">Facture N°</div>
+          <div style="color:#f4a825;font-size:2rem;font-weight:800;line-height:1">#{{ commande.id_Commande }}</div>
+          <div style="color:rgba(255,255,255,.5);font-size:.8rem;margin-top:4px">{{ commande.Date|date:"d/m/Y à H:i" }}</div>
+        </div>
+      </div>
+    </div>
+ 
+    <div style="padding:30px 36px">
+ 
+      <!-- INFOS CLIENT & MODE -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;padding-bottom:22px;border-bottom:2px solid #f0f2f5">
+        <div>
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#aaa;margin-bottom:8px">Client</div>
+          <div style="font-weight:800;color:#1a1a2e;font-size:1.05rem">{{ commande.id_Client }}</div>
+          {% if commande.id_Client.Tel %}
+          <div style="color:#666;font-size:.85rem;margin-top:4px">📞 {{ commande.id_Client.Tel }}</div>
+          {% endif %}
+        </div>
+        <div>
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#aaa;margin-bottom:8px">Détails commande</div>
+          <table style="font-size:.88rem;border-collapse:collapse">
+            <tr>
+              <td style="color:#888;padding:3px 0;padding-right:12px">Mode :</td>
+              <td style="font-weight:700;color:#1a1a2e">
+                {% if commande.Type == 'Sur place' %}🪑{% elif commande.Type == 'À livrer' %}🚚{% else %}🥡{% endif %}
+                {{ commande.Type }}
+              </td>
+            </tr>
+            <tr>
+              <td style="color:#888;padding:3px 0;padding-right:12px">Paiement :</td>
+              <td style="font-weight:700;color:#1a1a2e">{{ commande.Mode_de_Paiement }}</td>
+            </tr>
+            <tr>
+              <td style="color:#888;padding:3px 0;padding-right:12px">Statut :</td>
+              <td>
+                <span style="background:#fff3cd;color:#856404;padding:2px 10px;border-radius:12px;font-size:.78rem;font-weight:700">
+                  ⏳ En préparation
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+ 
+      <!-- TABLEAU PLATS -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
+        <thead>
+          <tr style="background:#f8f9fa;border-radius:8px">
+            <th style="padding:12px 16px;text-align:left;font-size:.75rem;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:.5px">Plat</th>
+            <th style="padding:12px 16px;text-align:center;font-size:.75rem;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:.5px">Qté</th>
+            <th style="padding:12px 16px;text-align:right;font-size:.75rem;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:.5px">Prix unit.</th>
+            <th style="padding:12px 16px;text-align:right;font-size:.75rem;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:.5px">Sous-total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in lignes %}
+          <tr style="border-bottom:1px solid #f0f2f5">
+            <td style="padding:14px 16px;font-weight:600;color:#1a1a2e">{{ l.id_Produit.Nom }}</td>
+            <td style="padding:14px 16px;text-align:center;color:#555">{{ l.Quantite|floatformat:0 }}</td>
+            <td style="padding:14px 16px;text-align:right;color:#555">{{ l.Prix_Unitaire|floatformat:0 }} FCFA</td>
+            <td style="padding:14px 16px;text-align:right;font-weight:700;color:#c0392b">{{ l.sous_total|floatformat:0 }} FCFA</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" style="padding:18px 16px;text-align:right;font-weight:800;font-size:1.05rem;color:#1a1a2e;background:#f8f9fa">
+              TOTAL À PAYER
+            </td>
+            <td style="padding:18px 16px;text-align:right;font-weight:800;font-size:1.5rem;color:#f4a825;background:#f8f9fa">
+              {{ commande.Montant_Total|floatformat:0 }} FCFA
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+ 
+      <!-- MESSAGE REMERCIEMENT -->
+      <div style="text-align:center;background:linear-gradient(135deg,#fff8e8,#fff3cd);border-radius:12px;padding:18px;border:1px solid #ffeaa7">
+        <div style="font-weight:800;color:#856404;font-size:1rem">🙏 Merci pour votre commande !</div>
+        <div style="color:#856404;font-size:.85rem;margin-top:4px">
+          Temps de préparation estimé :
+          {% if commande.Type == 'Sur place' %}15–25 min{% elif commande.Type == 'À emporter' %}20–30 min{% else %}30–45 min{% endif %}
+        </div>
+      </div>
+ 
+      <!-- PIED DE FACTURE -->
+      <div style="margin-top:24px;padding-top:16px;border-top:1px dashed #e0e0e0;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:.75rem;color:#aaa">Facture générée le {% now "d/m/Y à H:i" %}</div>
+        <div style="font-size:.75rem;color:#aaa">RestaurantPro — ENSPY 2025-2026</div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- BOUTONS ACTION -->
+  <div style="display:flex;gap:12px;justify-content:center;margin-top:28px" class="no-print">
+    <button onclick="window.print()"
+            style="padding:13px 28px;background:#1a1a2e;color:#fff;border:none;border-radius:25px;font-weight:700;cursor:pointer;font-size:.95rem;display:flex;align-items:center;gap:8px">
+      🖨️ Imprimer la facture
+    </button>
+    <a href="{% url 'menu_public' %}"
+       style="padding:13px 28px;background:#f4a825;color:#1a1a2e;border-radius:25px;font-weight:700;text-decoration:none;font-size:.95rem;display:flex;align-items:center;gap:8px">
+      🍽️ Nouvelle commande
+    </a>
+    <a href="{% url 'accueil' %}"
+       style="padding:13px 28px;background:#f0f2f5;color:#444;border-radius:25px;font-weight:700;text-decoration:none;font-size:.95rem">
+      🏠 Accueil
+    </a>
+  </div>
+</div>
+ 
+<style>
+@media print {
+  body { background: white; }
+  #facture { box-shadow: none; border-radius: 0; }
+  .no-print { display: none !important; }
+}
+</style>
+{% endblock %}

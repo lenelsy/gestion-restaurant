@@ -1,0 +1,82 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Commande #{{ commande.id_Commande }}{% endblock %}
+{% block page_title %}🧾 Commande #{{ commande.id_Commande }}{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'commande_list' %}" style="color:var(--pri);text-decoration:none">Commandes</a></li>
+<li class="breadcrumb-item active">#{{ commande.id_Commande }}</li>
+{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <h6 class="fw-bold mb-3" style="color:var(--pri)"><i class="bi bi-info-circle me-2"></i>Informations</h6>
+      <table class="table table-sm">
+        <tr><td class="text-muted small">Client</td><td><strong>{{ commande.id_Client }}</strong></td></tr>
+        <tr><td class="text-muted small">Date</td><td>{{ commande.Date|date:"d/m/Y H:i" }}</td></tr>
+        <tr><td class="text-muted small">Type</td><td>
+          {% if commande.Type == 'Sur place' %}🪑{% elif commande.Type == 'À livrer' %}🚚{% else %}🥡{% endif %}
+          {{ commande.Type }}
+        </td></tr>
+        <tr><td class="text-muted small">Paiement</td><td>{{ commande.Mode_de_Paiement }}</td></tr>
+        <tr><td class="text-muted small">Statut</td><td>
+          <select onchange="location='?statut='+this.value" style="font-size:.8rem;padding:2px 6px;border-radius:6px;border:1px solid #ddd">
+            <option {% if commande.Statut = 'en_cours' %}selected{% endif %} value="en_cours">⏳ En cours</option>
+            <option {% if commande.Statut = 'prête' %}selected{% endif %} value="prête">✓ Prête</option>
+            <option {% if commande.Statut = 'livrée' %}selected{% endif %} value="livrée">✅ Livrée</option>
+            <option {% if commande.Statut = 'annulée' %}selected{% endif %} value="annulée">✗ Annulée</option>
+          </select>
+        </td></tr>
+        <tr><td class="text-muted small">Total</td><td><strong class="text-danger fs-5">{{ commande.Montant_Total|floatformat:0 }} FCFA</strong></td></tr>
+      </table>
+      <div class="d-flex gap-2 mt-3">
+        <a href="{% url 'facture_commande' commande.pk %}" class="btn btn-sm btn-outline-success w-100"><i class="bi bi-printer me-1"></i>Facture</a>
+        <a href="{% url 'commande_list' %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card border-0" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between">
+        <h6 class="fw-bold">Lignes de commande</h6>
+        <strong class="text-danger">{{ commande.Montant_Total|floatformat:0 }} FCFA</strong>
+      </div>
+      <!-- AJOUTER UN PLAT -->
+      <div class="px-4 pb-3 border-bottom">
+        <form method="post" class="d-flex gap-2 align-items-end flex-wrap">
+          {% csrf_token %}
+          <div>
+            <label class="form-label small fw-bold">Plat</label>
+            {{ form.id_Produit }}
+          </div>
+          <div>
+            <label class="form-label small fw-bold">Qté</label>
+            {{ form.Quantite }}
+          </div>
+          <div>
+            <label class="form-label small fw-bold">Prix (FCFA)</label>
+            {{ form.Prix_Unitaire }}
+          </div>
+          <button type="submit" class="btn btn-pri btn-sm"><i class="bi bi-plus me-1"></i>Ajouter</button>
+        </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead style="background:#f8f9fa"><tr><th class="px-4">Plat</th><th>Qté</th><th>Prix unit.</th><th>Sous-total</th><th class="text-center">Suppr.</th></tr></thead>
+          <tbody>
+            {% for l in lignes %}
+            <tr>
+              <td class="px-4"><strong>{{ l.id_Produit.Nom }}</strong></td>
+              <td>{{ l.Quantite|floatformat:0 }}</td>
+              <td>{{ l.Prix_Unitaire|floatformat:0 }} FCFA</td>
+              <td><strong class="text-danger">{{ l.sous_total|floatformat:0 }} FCFA</strong></td>
+              <td class="text-center"><a href="{% url 'ligne_delete' l.pk %}" class="text-danger text-decoration-none">🗑️</a></td>
+            </tr>
+            {% empty %}<tr><td colspan="5" class="text-center text-muted py-4">Aucun plat ajouté</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+ 

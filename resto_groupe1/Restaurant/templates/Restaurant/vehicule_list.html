@@ -1,0 +1,30 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Véhicules{% endblock %}
+{% block page_title %}🚗 Véhicules{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Véhicules</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'vehicule_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouveau véhicule</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Immatriculation</th><th>Marque</th><th>Modèle</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for v in vehicules %}
+        <tr>
+          <td>#{{ v.id_Vehicule }}</td>
+          <td><strong>{{ v.Immatriculation }}</strong></td>
+          <td>{{ v.Marque|default:"—" }}</td>
+          <td>{{ v.Modele|default:"—" }}</td>
+          <td class="text-center">
+            <a href="{% url 'vehicule_update' v.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'vehicule_delete' v.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="5" class="text-center text-muted py-5">Aucun véhicule</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Réservations{% endblock %}
+{% block page_title %}📅 Réservations{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Réservations</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'reservation_create' %}" class="btn btn-pri"><i class="bi bi-calendar-plus me-2"></i>Nouvelle réservation</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Client</th><th>Table</th><th>Date</th><th>Heure</th><th>Statut</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for r in reservations %}
+        <tr>
+          <td>#{{ r.id_Reservation }}</td>
+          <td><strong>{{ r.id_Client }}</strong></td>
+          <td>{{ r.id_Table }}</td>
+          <td>{{ r.Date|date:"d/m/Y" }}</td>
+          <td>{{ r.Heure }}</td>
+          <td>
+            {% if r.Statut == 'Confirmée' %}<span class="badge badge-conf">✓ {{ r.Statut }}</span>
+            {% elif r.Statut == 'Annulée' %}<span class="badge badge-ann">✗ {{ r.Statut }}</span>
+            {% else %}<span class="badge badge-att">⏳ {{ r.Statut }}</span>{% endif %}
+          </td>
+          <td class="text-center">
+            <a href="{% url 'reservation_update' r.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'reservation_delete' r.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="7" class="text-center text-muted py-5">Aucune réservation</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

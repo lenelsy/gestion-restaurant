@@ -1,0 +1,32 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Approvisionnements{% endblock %}
+{% block page_title %}🚚 Approvisionnements{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Approvisionnements</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-4">
+  <a href="{% url 'approvisionnement_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvel approvisionnement</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Ingrédient</th><th>Fournisseur</th><th>Date</th><th>Quantité</th><th>Prix unit.</th><th>Total</th><th class="text-center">Suppr.</th></tr></thead>
+      <tbody>
+        {% for a in appros %}
+        <tr>
+          <td>#{{ a.id_Approvisionnement }}</td>
+          <td><strong>{{ a.id_Ingredient.Nom }}</strong></td>
+          <td>{{ a.id_Fournisseur.Nom }}</td>
+          <td>{{ a.Date|date:"d/m/Y" }}</td>
+          <td>{{ a.Quantite }}</td>
+          <td>{{ a.Prix_Unitaire|floatformat:0 }} FCFA</td>
+          <td><strong class="text-danger">{{ a.montant_total|floatformat:0 }} FCFA</strong></td>
+          <td class="text-center">
+            <a href="{% url 'approvisionnement_delete' a.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="8" class="text-center text-muted py-5">Aucun approvisionnement</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

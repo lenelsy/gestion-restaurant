@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Délices — Menu</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#faf8f3;}
+nav{background:linear-gradient(135deg,#1a2744,#2a3550);padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.nav-logo{font-family:Georgia,serif;font-size:1.5rem;font-weight:900;
+  font-style:italic;color:#b49140;text-decoration:none;}
+.nav-links{display:flex;gap:8px;}
+.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;
+  padding:8px 18px;border-radius:25px;font-size:0.88rem;transition:all 0.25s;}
+.nav-links a:hover,.nav-links a.active{background:rgba(180,145,64,0.25);color:#e8c870;}
+.nav-btn{background:linear-gradient(135deg,#c9973a,#b8832a);
+  color:white !important;font-weight:700 !important;}
+.section{padding:60px 40px;max-width:1200px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:50px;}
+.section-tag{color:#b49140;font-size:0.72rem;letter-spacing:6px;
+  text-transform:uppercase;font-family:Georgia,serif;
+  margin-bottom:10px;display:block;}
+.section-header h1{font-family:Georgia,serif;font-size:2.5rem;
+  font-weight:900;font-style:italic;color:#1a2744;margin-bottom:12px;}
+.divider{width:70px;height:2px;
+  background:linear-gradient(90deg,transparent,#b49140,transparent);
+  margin:0 auto;}
+.menu-grid{display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:28px;}
+.menu-card{background:white;border-radius:16px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,0.07);
+  transition:transform 0.3s,box-shadow 0.3s;
+  border:1px solid rgba(180,145,64,0.12);}
+.menu-card:hover{transform:translateY(-6px);
+  box-shadow:0 12px 35px rgba(0,0,0,0.12);}
+.card-top{background:linear-gradient(135deg,#1a2744,#2a3550);
+  padding:32px 20px;text-align:center;}
+.card-emoji{font-size:3.2rem;display:block;margin-bottom:8px;}
+.card-type{background:rgba(180,145,64,0.3);color:#e8c870;
+  font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;
+  padding:3px 14px;border-radius:20px;display:inline-block;}
+.card-body{padding:22px;}
+.card-body h3{font-family:Georgia,serif;font-size:1.25rem;
+  font-style:italic;color:#1a2744;margin-bottom:8px;}
+.card-body p{color:#888;font-size:0.83rem;line-height:1.6;margin-bottom:14px;}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.tag{background:#f5f0e8;color:#b49140;font-size:0.73rem;
+  padding:4px 10px;border-radius:20px;font-weight:600;}
+.btn-cmd{display:block;text-align:center;
+  background:linear-gradient(135deg,#c9973a,#b8832a);
+  color:white;padding:11px;border-radius:8px;
+  text-decoration:none;font-weight:700;font-size:0.88rem;
+  transition:all 0.3s;}
+.btn-cmd:hover{box-shadow:0 4px 15px rgba(180,130,40,0.45);
+  transform:translateY(-2px);}
+footer{background:#111827;padding:25px;text-align:center;
+  color:rgba(255,255,255,0.3);font-size:0.82rem;}
+footer span{color:#b49140;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/Restaurant/" class="nav-logo">Les Délices</a>
+  <div class="nav-links">
+    <a href="/Restaurant/menu/" class="active">🍽️ Menu</a>
+    <a href="/Restaurant/reserver/">📅 Réserver</a>
+    <a href="/personnel/login/" class="nav-btn">👔 Personnel</a>
+  </div>
+</nav>
+
+<div class="section">
+  <div class="section-header">
+    <span class="section-tag">✦ Notre Carte ✦</span>
+    <h1>Le Menu du Restaurant</h1>
+    <div class="divider"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-card">
+      <div class="card-top">
+        <span class="card-emoji">🍗</span>
+        <span class="card-type">Plat</span>
+      </div>
+      <div class="card-body">
+        <h3>Poulet DG</h3>
+        <p>Poulet savoureux aux légumes, plantain et épices africaines.</p>
+          <div class="meta">
+          <span class="tag">⏱ 2 heures</span>
+          <span class="tag">👥 3 pers.</span>
+        </div>
+        <a href="/Restaurant/reserver/" class="btn-cmd">Commander →</a>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="card-top">
+        <span class="card-emoji">🥬</span>
+        <span class="card-type">Plat</span>
+      </div>
+      <div class="card-body">
+        <h3>Ndolé</h3>
+        <p>Plat traditionnel camerounais aux feuilles de ndolé et arachides.</p>
+        <div class="meta">
+          <span class="tag">⏱ 2 heures</span>
+          <span class="tag">👥 4 pers.</span>
+        </div>
+        <a href="/Restaurant/reserver/" class="btn-cmd">Commander →</a>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="card-top">
+        <span class="card-emoji">🍚</span>
+        <span class="card-type">Plat</span>
+      </div>
+      <div class="card-body">
+        <h3>Riz Sauté</h3>
+        <p>Riz sauté aux légumes frais, viande et épices maison.</p>
+        <div class="meta">
+          <span class="tag">⏱ 1 heure</span>
+          <span class="tag">👥 3 pers.</span>
+        </div>
+        <a href="/Restaurant/reserver/" class="btn-cmd">Commander →</a>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="card-top">
+        <span class="card-emoji">🥤</span>
+        <span class="card-type">Boisson</span>
+      </div>
+      <div class="card-body">
+        <h3>Jus de Gingembre</h3>
+        <p>Jus naturel de gingembre frais, sucré et rafraîchissant.</p>
+        <div class="meta">
+          <span class="tag">⏱ 45 min</span>
+          <span class="tag">👥 2 pers.</span>
+        </div>
+        <a href="/Restaurant/reserver/" class="btn-cmd">Commander →</a>
+      </div>
+    </div>
+
+    <div class="menu-card">
+      <div class="card-top">
+        <span class="card-emoji">🌺</span>
+        <span class="card-type">Boisson</span>
+      </div>
+      <div class="card-body">
+        <h3>Jus de Bissap</h3>
+        <p>Infusion de fleurs d'hibiscus sucrées, fraîche et délicieuse.</p>
+        <div class="meta">
+          <span class="tag">⏱ 30 min</span>
+          <span class="tag">👥 2 pers.</span>
+        </div>
+        <a href="/Restaurant/reserver/" class="btn-cmd">Commander →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>✦ &nbsp; <span>Les Délices du Groupe 1</span> &nbsp; ✦</footer>
+</body>
+</html>

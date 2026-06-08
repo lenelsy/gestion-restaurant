@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recette — {{ produit.Nom }}</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;display:flex;min-height:100vh;}
+.sidebar{width:240px;background:linear-gradient(180deg,#1a2744,#2a3550,#1a3a5c);color:white;position:fixed;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar-logo{padding:28px 20px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
+.sidebar-logo h2{font-family:Georgia,serif;font-size:1.3rem;font-weight:900;font-style:italic;color:#b49140;}
+.nav-section{padding:16px 18px 6px;font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3);font-weight:600;}
+.sidebar a{display:flex;align-items:center;gap:12px;padding:11px 20px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.86rem;transition:all 0.2s;border-left:3px solid transparent;}
+.sidebar a:hover,.sidebar a.active{background:rgba(180,145,64,0.15);color:#e8c870;border-left-color:#b49140;padding-left:24px;}
+.sidebar-footer{position:absolute;bottom:0;width:100%;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);}
+.sidebar-footer a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.82rem;padding:8px 0 !important;border-left:none !important;}
+.main{margin-left:240px;flex:1;padding:28px;}
+.topbar{background:white;border-radius:12px;padding:18px 24px;margin-bottom:24px;box-shadow:0 2px 10px rgba(0,0,0,0.06);display:flex;justify-content:space-between;align-items:center;}
+.topbar h1{font-size:1.3rem;color:#1a2744;font-weight:700;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.card{background:white;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+.card-title{font-size:0.95rem;font-weight:700;color:#1a2744;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #f0f2f5;}
+table{width:100%;border-collapse:collapse;font-size:0.84rem;}
+th{background:#f8f9fa;padding:10px 12px;text-align:left;font-weight:600;color:#555;font-size:0.75rem;text-transform:uppercase;}
+td{padding:11px 12px;border-bottom:1px solid #f0f2f5;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:0.8rem;font-weight:600;color:#555;text-transform:uppercase;margin-bottom:7px;}
+.fg input,.fg select{width:100%;padding:11px 13px;border:1px solid #dee2e6;border-radius:8px;font-size:0.9rem;outline:none;}
+.fg input:focus,.fg select:focus{border-color:#b49140;}
+.btn{padding:11px 20px;border-radius:8px;border:none;cursor:pointer;font-size:0.88rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
+.btn-gold{background:linear-gradient(135deg,#c9973a,#b8832a);color:white;width:100%;justify-content:center;margin-top:4px;}
+.btn-gray{background:#6c757d;color:white;}
+.btn-red{background:#e94560;color:white;padding:6px 12px;font-size:0.78rem;border:none;border-radius:6px;cursor:pointer;}
+.msg-ok{background:#d4edda;border:1px solid #c3e6cb;border-radius:8px;padding:12px;color:#155724;margin-bottom:16px;font-size:0.88rem;}
+.info-produit{background:#f5f0e8;border-radius:10px;padding:16px;margin-bottom:20px;}
+.info-produit p{font-size:0.88rem;color:#b49140;font-weight:600;margin-bottom:4px;}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><h2>Les Délices</h2></div>
+  <div class="nav-section">Principal</div>
+  <a href="/personnel/dashboard/">📊 Dashboard</a>
+  <div class="nav-section">Cuisine</div>
+  <a href="/personnel/produits/" class="active">🍽️ Produits</a>
+  <a href="/personnel/ingredients/">🧂 Ingrédients</a>
+  <a href="/personnel/stock/">📦 Stock</a>
+  <div class="sidebar-footer">
+    <a href="/personnel/logout/">🚪 Déconnexion</a>
+  </div>
+</nav>
+<main class="main">
+  <div class="topbar">
+    <h1>🧂 Recette — {{ produit.Nom }}</h1>
+    <a href="/personnel/produits/" class="btn btn-gray">← Retour</a>
+  </div>
+
+  <div class="info-produit">
+    <p>🍽️ {{ produit.Nom }} — {{ produit.Description }}</p>
+    <p>💰 Prix : {{ produit.Prix }} F CFA &nbsp;|&nbsp; ⏱ {{ produit.Duree_Cuisson }}</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📋 Ingrédients de la recette</div>
+      {% if msg %}<div class="msg-ok">{{ msg }}</div>{% endif %}
+      <table>
+        <thead>
+          <tr><th>Ingrédient</th><th>Quantité</th><th>Unité</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          {% for c in compositions %}
+          <tr>
+            <td><strong>{{ c.id_Ingredient.Nom }}</strong></td>
+            <td>{{ c.Quantite_Utilisee }}</td>
+            <td>{{ c.id_Ingredient.Unite_de_Mesure }}</td>
+            <td>
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="supprimer">
+                <input type="hidden" name="ingredient_id" value="{{ c.id_Ingredient.pk }}">
+                <button type="submit" class="btn-red"
+                  onclick="return confirm('Retirer cet ingrédient ?')">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" style="color:#888;text-align:center;padding:20px;">Aucun ingrédient</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ Ajouter un ingrédient</div>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="ajouter">
+        <div class="fg">
+          <label>Ingrédient</label>
+          <select name="ingredient">
+            {% for i in ingredients %}
+            <option value="{{ i.pk }}">{{ i.Nom }} ({{ i.Unite_de_Mesure }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Quantité utilisée</label>
+          <input type="number" name="quantite" step="0.01" placeholder="Ex: 0.5" required>
+        </div>
+        <button type="submit" class="btn btn-gold">➕ Ajouter à la recette</button>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

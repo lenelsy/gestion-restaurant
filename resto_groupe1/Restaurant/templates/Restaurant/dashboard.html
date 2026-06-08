@@ -1,0 +1,209 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<!-- KPI -->
+<div class="row g-4 mb-4">
+  <div class="col-xl-3 col-md-6">
+    <div class="card kpi-card p-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="icon" style="background:linear-gradient(135deg,#667eea,#764ba2)">👥</div>
+        <span class="badge bg-light text-muted small">Total</span>
+      </div>
+      <div class="val">{{ total_clients }}</div>
+      <div class="lbl mt-1">Clients enregistrés</div>
+      <a href="{% url 'client_list' %}" class="small text-decoration-none mt-2 d-block" style="color:#667eea">Voir tous →</a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card kpi-card p-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="icon" style="background:linear-gradient(135deg,#f093fb,#f5576c)">🧾</div>
+        <span class="badge bg-light text-muted small">Total</span>
+      </div>
+      <div class="val">{{ total_commandes }}</div>
+      <div class="lbl mt-1">Commandes</div>
+      <a href="{% url 'commande_list' %}" class="small text-decoration-none mt-2 d-block" style="color:#f5576c">Voir toutes →</a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card kpi-card p-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="icon" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">💰</div>
+        <span class="badge bg-light text-muted small">{{ mois_label }}</span>
+      </div>
+      <div class="val" style="font-size:1.4rem">{{ ca_mois|floatformat:0 }}</div>
+      <div class="lbl mt-1">CA du mois (FCFA)</div>
+      <a href="{% url 'rapport_financier' %}" class="small text-decoration-none mt-2 d-block" style="color:#4facfe">Rapport →</a>
+    </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card kpi-card p-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="icon" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">👷</div>
+        <span class="badge bg-light text-muted small">Actifs</span>
+      </div>
+      <div class="val">{{ total_employes }}</div>
+      <div class="lbl mt-1">Employés</div>
+      <a href="{% url 'employe_list' %}" class="small text-decoration-none mt-2 d-block" style="color:#43e97b">Voir tous →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ALERTES RAPIDES -->
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card border-0 p-3 text-center" style="border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06)">
+      <div style="font-size:2rem">📅</div>
+      <div class="fw-bold fs-4 mt-1">{{ reservations_jour }}</div>
+      <div class="text-muted small">Réservations aujourd'hui</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 p-3 text-center" style="border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06)">
+      <div style="font-size:2rem">🔧</div>
+      <div class="fw-bold fs-4 mt-1 {% if equipements_panne %}text-danger{% endif %}">{{ equipements_panne }}</div>
+      <div class="text-muted small">Équipements en panne</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 p-3 text-center" style="border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06)">
+      <div style="font-size:2rem">⚠️</div>
+      <div class="fw-bold fs-4 mt-1 {% if stocks_alerte %}text-danger{% endif %}">{{ stocks_alerte|length }}</div>
+      <div class="text-muted small">Stocks en alerte</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card border-0 p-3 text-center" style="border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.06)">
+      <div style="font-size:2rem">📢</div>
+      <div class="fw-bold fs-4 mt-1 text-success">{{ actions_actives }}</div>
+      <div class="text-muted small">Promos actives</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMANDES RECENTES + CA PAR TYPE -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="card border-0 h-100" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+        <h6 class="fw-bold mb-0">🕐 Dernières commandes</h6>
+        <a href="{% url 'commande_list' %}" class="btn btn-sm btn-outline-danger">Tout voir</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table mb-0 dt">
+          <thead><tr><th>#</th><th>Client</th><th>Type</th><th>Montant</th><th>Statut</th></tr></thead>
+          <tbody>
+            {% for cmd in commandes_recentes %}
+            <tr>
+              <td><span class="badge bg-secondary">#{{ cmd.id_Commande }}</span></td>
+              <td><strong>{{ cmd.id_Client }}</strong></td>
+              <td>
+                {% if cmd.Type == 'Sur place' %}<span class="badge badge-conf">🪑 {{ cmd.Type }}</span>
+                {% elif cmd.Type == 'À livrer' %}<span class="badge badge-enc">🚚 {{ cmd.Type }}</span>
+                {% else %}<span class="badge badge-att">🥡 {{ cmd.Type }}</span>{% endif %}
+              </td>
+              <td><strong>{{ cmd.Montant_Total|floatformat:0 }} FCFA</strong></td>
+              <td>
+                {% if cmd.Statut == 'en_cours' %}<span class="badge" style="background:#fff3cd;color:#856404">⏳ En cours</span>
+                {% elif cmd.Statut == 'prête' %}<span class="badge" style="background:#cce5ff;color:#004085">✓ Prête</span>
+                {% elif cmd.Statut == 'livrée' %}<span class="badge badge-conf">✅ Livrée</span>
+                {% else %}<span class="badge badge-ann">✗ Annulée</span>{% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-4">Aucune commande</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card border-0 h-100 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <h6 class="fw-bold mb-4">📊 CA par type</h6>
+      {% for type, label in type_ca %}
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <span class="small fw-semibold">{{ label }}</span>
+          <span class="small text-muted">{{ type|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="progress" style="height:8px;border-radius:4px">
+          <div class="progress-bar" style="width:{% if ca_total %}{% widthratio type ca_total 100 %}{% else %}0{% endif %}%;background:{% cycle '#c0392b' '#e67e22' '#3498db' %}"></div>
+        </div>
+      </div>
+      {% endfor %}
+      <hr>
+      <div class="d-flex justify-content-between mt-2">
+        <strong>Total global</strong>
+        <strong class="text-danger">{{ ca_total|floatformat:0 }} FCFA</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOP PRODUITS + STOCKS ALERTE -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-6">
+    <div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <h6 class="fw-bold mb-3">🏆 Top 5 plats vendus</h6>
+      {% for p in top_produits %}
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#f4a825,#e67e22);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#fff;font-weight:700">{{ forloop.counter }}</div>
+          <div>
+            <div class="fw-semibold small">{{ p.id_Produit__Nom }}</div>
+            <div class="text-muted" style="font-size:.75rem">{{ p.total_qte|floatformat:0 }} vendus</div>
+          </div>
+        </div>
+        <div class="text-end">
+          <div class="fw-bold small text-danger">{{ p.total_ca|floatformat:0 }} FCFA</div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted small">Aucune donnée</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+      <h6 class="fw-bold mb-3 text-danger">⚠️ Stocks en alerte</h6>
+      {% for s in stocks_alerte %}
+      <div class="d-flex align-items-center justify-content-between mb-3 p-2" style="background:#fff5f5;border-radius:8px;border-left:3px solid #dc3545">
+        <div>
+          <div class="fw-semibold small">{{ s.id_Ingredient.Nom }}</div>
+          <div style="font-size:.75rem;color:#dc3545">{{ s.Quantite_Actuelle }} / {{ s.Seuil_Alerte }} {{ s.id_Ingredient.Unite_de_Mesure }}</div>
+        </div>
+        <div class="progress" style="width:80px;height:8px;border-radius:4px">
+          <div class="progress-bar bg-danger" style="width:{{ s.pourcentage }}%"></div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-3">
+        <div style="font-size:2rem">✅</div>
+        <p class="text-success small fw-bold mt-1">Tous les stocks sont OK</p>
+      </div>
+      {% endfor %}
+      {% if stocks_alerte %}
+      <a href="{% url 'stock_list' %}" class="btn btn-sm btn-outline-danger w-100 mt-2">Gérer les stocks</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- ACTIONS RAPIDES -->
+<div class="card border-0 p-4" style="border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.07)">
+  <h6 class="fw-bold mb-3">⚡ Actions rapides</h6>
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'commande_create' %}" class="btn btn-pri"><i class="bi bi-plus-circle me-2"></i>Nouvelle commande</a>
+    <a href="{% url 'reservation_create' %}" class="btn btn-outline-primary"><i class="bi bi-calendar-plus me-2"></i>Réservation</a>
+    <a href="{% url 'client_create' %}" class="btn btn-outline-secondary"><i class="bi bi-person-plus me-2"></i>Nouveau client</a>
+    <a href="{% url 'variation_stock_create' %}" class="btn btn-outline-warning"><i class="bi bi-box-arrow-in-down me-2"></i>Entrée stock</a>
+    <a href="{% url 'approvisionnement_create' %}" class="btn btn-outline-success"><i class="bi bi-truck me-2"></i>Approvisionnement</a>
+    <a href="{% url 'rapport_financier' %}" class="btn btn-outline-danger"><i class="bi bi-bar-chart-line me-2"></i>Rapport financier</a>
+  </div>
+</div>
+{% endblock %}

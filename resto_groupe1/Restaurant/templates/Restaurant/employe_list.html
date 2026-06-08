@@ -1,0 +1,38 @@
+{% extends 'restaurant/base.html' %}
+{% block title %}Employés{% endblock %}
+{% block page_title %}👷 Employés{% endblock %}
+{% block breadcrumb %}<li class="breadcrumb-item active">Employés</li>{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="card border-0 p-3" style="border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.06)">
+    <div class="small text-muted">Masse salariale mensuelle</div>
+    <div class="fw-bold text-danger">{{ masse_salariale|floatformat:0 }} FCFA</div>
+  </div>
+  <a href="{% url 'employe_create' %}" class="btn btn-pri"><i class="bi bi-person-plus me-2"></i>Nouvel employé</a>
+</div>
+<div class="card dt border-0">
+  <div class="table-responsive">
+    <table class="table mb-0">
+      <thead><tr><th>#</th><th>Nom complet</th><th>Téléphone</th><th>Salaire</th><th>Embauche</th><th>Poste actuel</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for e in employes %}
+        <tr>
+          <td>#{{ e.id_Employe }}</td>
+          <td><strong>{{ e.Prenom }} {{ e.Nom }}</strong></td>
+          <td>{{ e.Tel|default:"—" }}</td>
+          <td><span class="fw-bold">{{ e.Salaire|default:0|floatformat:0 }} FCFA</span></td>
+          <td class="small">{{ e.Date_Embauche|date:"d/m/Y"|default:"—" }}</td>
+          <td>
+            {% for aff in e.affectation_set.all %}{% if not aff.Date_fin %}<span class="badge badge-conf">{{ aff.id_Poste }}</span>{% endif %}{% empty %}—{% endfor %}
+          </td>
+          <td class="text-center">
+            <a href="{% url 'employe_update' e.pk %}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></a>
+            <a href="{% url 'employe_delete' e.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+        {% empty %}<tr><td colspan="7" class="text-center text-muted py-5">Aucun employé</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
